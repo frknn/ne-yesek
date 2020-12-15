@@ -10,8 +10,7 @@ const Header = () => {
     <HeaderBg>
       <HeaderFlexContainer>
 
-        <HeaderTitle
-          title={'Ne Yesek'} />
+        <HeaderTitle title={'NeYesek'} />
 
         <HeaderMenu />
 

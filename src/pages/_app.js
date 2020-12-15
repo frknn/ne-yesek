@@ -1,7 +1,11 @@
 import { ChakraProvider, ColorModeProvider } from '@chakra-ui/react'
+import { CurrentUserContextProvider } from '../context/currentUserContext'
 import theme from '../theme'
 
+
 function MyApp({ Component, pageProps }) {
+
+
   return (
     <ChakraProvider resetCSS theme={theme}>
       <ColorModeProvider
@@ -9,7 +13,9 @@ function MyApp({ Component, pageProps }) {
           useSystemColorMode: true,
         }}
       >
-        <Component {...pageProps} />
+        <CurrentUserContextProvider>
+          <Component {...pageProps} />
+        </CurrentUserContextProvider>
       </ColorModeProvider>
     </ChakraProvider>
   )
