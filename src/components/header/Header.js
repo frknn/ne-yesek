@@ -10,9 +10,8 @@ const Header = () => {
     <HeaderBg>
       <HeaderFlexContainer>
 
-        <HeaderTitle>
-          NeYesek
-        </HeaderTitle>
+        <HeaderTitle
+          title={'Ne Yesek'} />
 
         <HeaderMenu />
 

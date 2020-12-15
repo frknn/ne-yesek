@@ -1,17 +1,16 @@
-import { HStack, Link as ChakraLink, useTheme } from "@chakra-ui/react"
+import { HStack, Link as ChakraLink } from "@chakra-ui/react"
 import { SearchIcon } from '@chakra-ui/icons'
 
 import Link from 'next/link';
 
 const LargeScreenMenuItem = ({ destination, children }) => {
-  const theme = useTheme()
 
   return (
     <Link href={destination}>
       <ChakraLink
         _hover={{
           textDecoration: 'none',
-          backgroundColor: theme.colors.lightRed
+          backgroundColor: "lightRed"
         }}
         fontWeight="semibold"
         p={2}
@@ -23,19 +22,21 @@ const LargeScreenMenuItem = ({ destination, children }) => {
 }
 
 const LargeScreenMenu = () => {
-  const theme = useTheme()
 
   return (
-    <HStack color={theme.colors.lightGray} spacing={2}>
+    <HStack color="lightGray" spacing={2}>
+      <LargeScreenMenuItem destination="/search">
+        <SearchIcon mb={1} mr={1} />
+        Tarif Ara
+      </LargeScreenMenuItem>
+      <LargeScreenMenuItem destination="/share">
+        Tarif Paylaş
+      </LargeScreenMenuItem>
       <LargeScreenMenuItem destination="/signup">
         Hesap Oluştur
       </LargeScreenMenuItem>
       <LargeScreenMenuItem destination="/login">
         Giriş Yap
-      </LargeScreenMenuItem>
-      <LargeScreenMenuItem destination="/search">
-        <SearchIcon mb={1} mr={1} />
-        Tarif Ara
       </LargeScreenMenuItem>
     </HStack>
   );

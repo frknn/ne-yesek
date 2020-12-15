@@ -11,7 +11,8 @@ const HeaderBg = ({ children }) => {
       pos="fixed"
       top={0}
       left={0}
-      bg={theme.colors.darkRed}
+      bgColor="darkRed"
+      zIndex="9999"
       boxShadow="md">
       {children}
     </Box>

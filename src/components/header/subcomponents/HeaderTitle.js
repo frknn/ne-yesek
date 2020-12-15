@@ -1,18 +1,17 @@
-import { Heading, Link as ChakraLink, useTheme } from '@chakra-ui/react'
+import { Heading, Link as ChakraLink } from '@chakra-ui/react'
 
-const HeaderTitle = ({ children }) => {
-  const theme = useTheme()
+const HeaderTitle = ({ title }) => {
 
   return (
     <Heading
       size="xl"
-      color={theme.colors.lightGray}
+      color="lightGray"
     >
       <ChakraLink
         href="/"
         _hover={{ textDecoration: 'none' }}
       >
-        {children}
+        {title}
       </ChakraLink>
     </Heading>
   );
