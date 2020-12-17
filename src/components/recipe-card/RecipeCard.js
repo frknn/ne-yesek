@@ -2,8 +2,11 @@ import { StarIcon, TimeIcon } from "@chakra-ui/icons";
 import { Avatar, Box, Flex, TagLeftIcon, Link as ChakraLink, Heading, HStack, IconButton, Image, Text, useTheme, Tag, TagLabel, WrapItem, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import Link from 'next/link';
+import { useRouter } from 'next/router'
 
 const RecipeCard = (props) => {
+
+  const router = useRouter()
 
   const { w, recipe } = props
 
@@ -35,6 +38,7 @@ const RecipeCard = (props) => {
     <WrapItem
       w={w || ["85%", "80%", "45%", "30%"]}
       m={4}
+      onClick={() => router.push(`/recipe/${recipe._id}`)}
     >
       <Box
         role="group"

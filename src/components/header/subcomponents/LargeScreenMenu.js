@@ -26,8 +26,8 @@ const LargeScreenMenu = ({ menuItems }) => {
   return <HStack color="lightGray" spacing={2}>
     {
       menuItems.map(menuItem => {
-        console.log(menuItem)
         return <LargeScreenMenuItem
+          key={menuItem.text}
           onClick={menuItem.onClick}
           destination={menuItem.destination}
 

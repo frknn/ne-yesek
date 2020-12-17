@@ -4,6 +4,7 @@ import RecipeCard from '../recipe-card/RecipeCard'
 const RecipeCardList = (props) => {
 
   const { mx, my, w, spacing, cardWidth, recipes } = props
+  console.log(recipes[0])
 
   return (
     <Wrap
@@ -16,18 +17,9 @@ const RecipeCardList = (props) => {
     >
       {
         recipes.map(
-          recipe => <RecipeCard key={recipe.id} w={cardWidth} recipe={recipe} />
+          recipe => <RecipeCard key={recipe.title} w={cardWidth} recipe={recipe} />
         )
       }
-
-      {/* <RecipeCard w={cardWidth} />
-      <RecipeCard w={cardWidth} />
-      <RecipeCard w={cardWidth} />
-      <RecipeCard w={cardWidth} />
-      <RecipeCard w={cardWidth} />
-      <RecipeCard w={cardWidth} />
-      <RecipeCard w={cardWidth} />
-      <RecipeCard w={cardWidth} /> */}
     </Wrap>
   );
 }

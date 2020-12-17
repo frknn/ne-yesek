@@ -3,32 +3,33 @@ import Link from 'next/link';
 import { StarIcon, CheckIcon } from '@chakra-ui/icons'
 import { useState } from "react";
 
-const Recipe = () => {
+const Recipe = ({recipe}) => {
 
   const handleFav = () => {
     const newRecipe = { ...recipe, fav: !recipeState.fav }
     setRecipeState(newRecipe)
   }
 
-  const recipe = {
-    imgUrl: "../../../pancake.jpg",
-    imgAlt: "bruh",
-    title: "Recipe Title",
-    desc: "Lorem ipsum dolor sit amet consectetur.",
-    category: "category1",
-    prepTime: "15 dk.",
-    cookTime: "20 dk.",
-    amount: "4",
-    ingredients: ['asfas', 'asfasf', 'asfasf', 'asfasf', 'asfasf', 'asfsagad'],
-    recipeSteps: ['ajshasld', 'asfjahsşlfhasf', 'askfjbasfjkshalf', 'asklfaslkfas'],
-    owner: {
-      name: 'Owner Name',
-      profilePicture: "https://cdn.pixabay.com/photo/2019/08/01/05/59/girl-4376755_960_720.jpg"
-    },
-    fav: false,
-  }
+  // const recipe = {
+  //   imgUrl: "../../../pancake.jpg",
+  //   imgAlt: "bruh",
+  //   title: "Recipe Title",
+  //   desc: "Lorem ipsum dolor sit amet consectetur.",
+  //   category: "category1",
+  //   prepTime: "15 dk.",
+  //   cookTime: "20 dk.",
+  //   amount: "4",
+  //   ingredients: ['asfas', 'asfasf', 'asfasf', 'asfasf', 'asfasf', 'asfsagad'],
+  //   recipeSteps: ['ajshasld', 'asfjahsşlfhasf', 'askfjbasfjkshalf', 'asklfaslkfas'],
+  //   owner: {
+  //     name: 'Owner Name',
+  //     profilePicture: "https://cdn.pixabay.com/photo/2019/08/01/05/59/girl-4376755_960_720.jpg"
+  //   },
+  //   fav: false,
+  // }
 
   const [recipeState, setRecipeState] = useState(recipe)
+  console.log(recipe)
 
   return (
     <Container my={24} maxW={["100%", "90%", "70%"]} centerContent>
@@ -36,7 +37,7 @@ const Recipe = () => {
         <Heading as="h1" fontSize={["4xl", "5xl", "6xl"]}>
           {recipe.title}
         </Heading>
-        <Text>{recipe.desc}</Text>
+        <Text>{recipe.description}</Text>
 
         <HStack p="0.5rem" w="full" justify={["space-between"]}>
 
@@ -54,7 +55,7 @@ const Recipe = () => {
                 fontSize={["xs", "sm", "md"]}
                 color="darkRed"
               >
-                {recipe.owner.name}
+                {recipe.owner.name + " " + recipe.owner.lastName}
               </ChakraLink>
             </Link>
           </HStack>
@@ -84,7 +85,7 @@ const Recipe = () => {
 
         </HStack>
 
-        <Image w="full" borderRadius="xl" src={recipe.imgUrl} alt={recipe.imgAlt} />
+        <Image w="full" borderRadius="xl" src={recipe.coverPhoto} alt={recipe.imgAlt} />
 
         <HStack
           spacing={1}
