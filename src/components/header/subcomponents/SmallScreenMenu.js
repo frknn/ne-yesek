@@ -5,17 +5,23 @@ import Link from 'next/link';
 import { ChevronDownIcon } from '@chakra-ui/icons'
 
 
-const SmallScreenMenu = () => {
-  const theme = useTheme()
+const SmallScreenMenu = ({ menuItems }) => {
+
   return (
     <Menu >
-      <MenuButton color={theme.colors.lightGray}>
+      <MenuButton color="lightGray">
         <ChevronDownIcon w={8} h={8} />
       </MenuButton>
       <MenuList>
-        <MenuItem><Link href="/signup">Hesap Oluştur</Link></MenuItem>
-        <MenuItem><Link href="/login">Giriş Yap</Link></MenuItem>
-        <MenuItem><Link href="/search">Yemek Ara</Link></MenuItem>
+        {
+          menuItems.map(menuItem => (
+            <MenuItem onClick={menuItem.onClick}>
+              <Link href={menuItem.destination}>
+                {menuItem.text}
+              </Link>
+            </MenuItem>
+          ))
+        }
       </MenuList>
     </Menu>
   );

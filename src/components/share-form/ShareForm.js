@@ -31,15 +31,16 @@ import {
   ListItem,
   useToast
 } from "@chakra-ui/react"
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 import { useState } from "react";
+import { useRouter } from "next/router";
 import ShareFormLayout from './subcomponents/ShareFormLayout'
 
 const ShareForm = () => {
 
   const [currentStep, setCurrentStep] = useState('')
   const [recipeSteps, setRecipeSteps] = useState([])
+  const router = useRouter()
+  const toast = useToast()
 
   const handleMove = (direction, index) => {
     let tempArr = [...recipeSteps]
@@ -212,6 +213,8 @@ const ShareForm = () => {
       >Gönder</Button>
     </ShareFormLayout>
   );
+
+
 }
 
 export default ShareForm;

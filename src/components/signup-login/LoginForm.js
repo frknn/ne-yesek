@@ -6,9 +6,6 @@ import { useToast } from "@chakra-ui/react"
 import { useState } from "react";
 import Link from 'next/link';
 import authService from '../../services/authService';
-import useLocalStorage from "../../utils/hooks/useLocalStorage";
-import { useContext } from "react";
-import { CurrentUserContext } from "../../context/currentUserContext";
 
 const LoginForm = () => {
 
@@ -18,26 +15,18 @@ const LoginForm = () => {
   const router = useRouter()
   const toast = useToast()
 
-  const userContext = useContext(CurrentUserContext)
-
   const handleLogin = async (e) => {
     e.preventDefault()
     const res = await authService.login(email, password)
 
     if (res.success) {
 
-      const currentUser = res.user
-      const accessToken = res.token
-      
-      localStorage.setItem('currentUser', JSON.stringify(currentUser))
-      localStorage.setItem('accessToken', JSON.stringify(accessToken))
-      
-      userContext.setCurrentUserInfo({
-        type: 'LOGIN',
-        currentUserInfo: currentUser,
-        currentUserAccessToken: accessToken
-      })
-      
+      const currentUserStr = JSON.stringify(res.user)
+      const accessTokenStr = JSON.stringify(res.token)
+
+      localStorage.setItem('currentUser', currentUserStr)
+      localStorage.setItem('accessToken', accessTokenStr)
+
       toast({
         title: `Hoşgeldin, ${res.user.name}!`,
         status: "success",

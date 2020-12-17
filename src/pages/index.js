@@ -5,7 +5,7 @@ const Index = ({data}) => (
   <>
     <Header />
     <RecipeCardList
-      recipes = {data}
+      recipes={data}
       mx="auto"
       my={24}
       w={["100%", "80%"]}
