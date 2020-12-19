@@ -3,8 +3,7 @@ import RecipeCard from '../recipe-card/RecipeCard'
 
 const RecipeCardList = (props) => {
 
-  const { mx, my, w, spacing, cardWidth, recipes } = props
-  console.log(recipes[0])
+  const { mx, my, w, spacing, cardWidth, recipes, onProfile } = props
 
   return (
     <Wrap
@@ -17,7 +16,7 @@ const RecipeCardList = (props) => {
     >
       {
         recipes.map(
-          recipe => <RecipeCard key={recipe.title} w={cardWidth} recipe={recipe} />
+          recipe => <RecipeCard key={recipe.title} w={cardWidth} recipe={recipe} onProfile={onProfile} />
         )
       }
     </Wrap>

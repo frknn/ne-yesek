@@ -29,7 +29,6 @@ const Recipe = ({recipe}) => {
   // }
 
   const [recipeState, setRecipeState] = useState(recipe)
-  console.log(recipe)
 
   return (
     <Container my={24} maxW={["100%", "90%", "70%"]} centerContent>
@@ -44,12 +43,12 @@ const Recipe = ({recipe}) => {
           <HStack spacing={2}>
             <Avatar
               size="sm"
-              src={recipe.owner.profilePicture}
+              src="https://cdn.pixabay.com/photo/2019/08/01/05/59/girl-4376755_960_720.jpg"
               borderWidth="3px"
               borderColor="darkRed"
             />
-            <Link
-              href="/bruh">
+            <Link scroll={true}
+              href={`/user/${recipe.owner._id}`}>
               <ChakraLink
                 fontWeight="semibold"
                 fontSize={["xs", "sm", "md"]}

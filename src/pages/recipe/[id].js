@@ -4,16 +4,14 @@ import axios from "axios";
 
 const recipe = ({ data }) => {
 
-  console.log('DYNAMIC ROUTE DATE: ', data)
-
-
   return (
     <>
       <Header />
-      <Recipe recipe={data.data}/>
+      <Recipe recipe={data.data} />
     </>
   );
 }
+
 
 export async function getServerSideProps(context) {
 
@@ -24,8 +22,6 @@ export async function getServerSideProps(context) {
       'Content-Type': 'application/json'
     }
   })
-
-  console.log('DATA IN GSSP', data.data)
 
   return {
     props: { data: data.data }

@@ -8,18 +8,17 @@ import { SearchIcon } from '@chakra-ui/icons'
 const HeaderMenu = () => {
 
   const toast = useToast()
-  const [menuItems, setmenuItems] = useState([])
+  const [menuItems, setMenuItems] = useState([])
 
   const logout = () => {
     localStorage.removeItem('currentUser')
     localStorage.removeItem('accessToken')
-    console.log('USER REMOVED')
     toast({
       description: 'Çıkış yapıldı!',
       isClosable: true,
       status: 'info',
     })
-    setmenuItems(loggedOutMenuItems)
+    setMenuItems(loggedOutMenuItems)
   }
 
   const loggedInMenuItems = [
@@ -56,13 +55,17 @@ const HeaderMenu = () => {
   ]
 
   useEffect(() => {
-    if (localStorage.getItem('currentUser')) {
-      setmenuItems(loggedInMenuItems)
+    if (localStorage.getItem('currentUser') && localStorage.getItem('accessToken')) {
+      const userProfileLink = {
+        destination: `/user/${JSON.parse(localStorage.getItem('currentUser'))._id}`,
+        text: 'Profilim'
+      }
+      loggedInMenuItems.splice(loggedInMenuItems.length - 1, 0, userProfileLink)
+      setMenuItems(loggedInMenuItems)
     } else {
-      setmenuItems(loggedOutMenuItems)
+      setMenuItems(loggedOutMenuItems)
     }
   }, [])
-
 
   const menu = useBreakpointValue({
     base: <SmallScreenMenu menuItems={menuItems} />, md: <LargeScreenMenu menuItems={menuItems} />

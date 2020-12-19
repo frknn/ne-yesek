@@ -90,24 +90,25 @@ const RecipeCard = (props) => {
             <Tag size="sm" bgColor="lightRed" color="lightGray"><TagLeftIcon as={TimeIcon} />{recipe.cookTime}</Tag>
           </HStack>
 
-          <HStack spacing={1}>
-            <Avatar
-              size="sm"
-              src="https://cdn.pixabay.com/photo/2019/08/01/05/59/girl-4376755_960_720.jpg"
-              borderWidth="2px"
-              borderColor="darkRed"
-            />
-            <Link
-              href="/bruh">
-              <ChakraLink
-                fontWeight="semibold"
-                fontSize="xs"
-                color="darkRed"
-              >
-                {recipe.owner.name + " " + recipe.owner.lastName}
-              </ChakraLink>
-            </Link>
-          </HStack>
+          {!props.onProfile &&
+            <HStack spacing={1}>
+              <Avatar
+                size="sm"
+                src="https://cdn.pixabay.com/photo/2019/08/01/05/59/girl-4376755_960_720.jpg"
+                borderWidth="2px"
+                borderColor="darkRed"
+              />
+              <Link
+                href={`/user/${recipe.owner._id}`}>
+                <ChakraLink
+                  fontWeight="semibold"
+                  fontSize="xs"
+                  color="darkRed"
+                >
+                  {recipe.owner.name + " " + recipe.owner.lastName}
+                </ChakraLink>
+              </Link>
+            </HStack>}
         </Box>
       </Box>
     </WrapItem>
