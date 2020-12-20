@@ -1,19 +1,36 @@
-import { useState } from 'react'
-import { Box, Flex, FormLabel, Input, Text } from "@chakra-ui/react";
+import { useState, useEffect } from 'react'
+import { Box, Flex, Heading, Input, Text } from "@chakra-ui/react";
 import RecipeCardList from '../recipe-card-list/RecipeCardList'
 import CloseButton from '../close-button/CloseButton'
-import axios from 'axios';
+import { getRecipesByTitle } from '../../services/recipeService'
+import useDebounce from '../../utils/hooks/useDebounce';
+import LoadingSpinner from '../loading-spinner/LoadingSpinner';
 
 const Search = () => {
 
+  console.log('SEARCH COMPONENT RE-RENDERING')
+
   const [searchString, setSearchString] = useState('')
   const [recipes, setRecipes] = useState([])
+  const [isSearching, setIsSearching] = useState(false)
 
-  const onSearchKeyPress = (e) => {
-    setSearchString(e.target.value)
-    axios.get(`http://localhost:5000/api/v1/recipes?title=${searchString}`)
-      .then(res => setRecipes(res.data.data))
-  }
+  /* debounce search string for given delay ms to prevent
+    calling API rapidly */
+  const debouncedTerm = useDebounce(searchString, 750)
+
+  useEffect(() => {
+    if (debouncedTerm) {
+      setIsSearching(true)
+      setRecipes([])
+      getRecipesByTitle(debouncedTerm)
+        .then(recipes => {
+          setIsSearching(false)
+          setRecipes(recipes)
+        })
+    } else {
+      setRecipes([])
+    }
+  }, [debouncedTerm])
 
   return (
     <Flex
@@ -33,7 +50,7 @@ const Search = () => {
 
         <Input
           value={searchString}
-          onChange={onSearchKeyPress}
+          onChange={e => setSearchString(e.target.value)}
           placeholder="Tarif adı..."
           focusBorderColor="darkRed"
           fontSize={["2rem", "2.25rem", "2.5rem", "3rem"]}
@@ -43,8 +60,21 @@ const Search = () => {
           variant="flushed"
           autoFocus
         />
-
-        <RecipeCardList recipes={recipes} />
+        {
+          isSearching
+          &&
+          <LoadingSpinner />
+        }
+        {
+          recipes.length ?
+            <>
+              <Heading color="lightRed" mt={12} textAlign="center" size="3xl">Tarifler</Heading>
+              <RecipeCardList
+                my={4}
+                w="full"
+                recipes={recipes} />
+            </> : null
+        }
       </Box>
     </Flex>
   );
