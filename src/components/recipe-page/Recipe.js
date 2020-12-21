@@ -42,9 +42,9 @@ const Recipe = ({recipe}) => {
 
           <HStack spacing={2}>
             <Avatar
-              size="sm"
+              size="md"
               src="https://cdn.pixabay.com/photo/2019/08/01/05/59/girl-4376755_960_720.jpg"
-              borderWidth="3px"
+              borderWidth="2px"
               borderColor="darkRed"
             />
             <Link scroll={true}
