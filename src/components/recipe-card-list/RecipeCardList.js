@@ -8,7 +8,7 @@ const RecipeCardList = (props) => {
   return (
     <Wrap
       justify="center"
-      align="center"
+      align="flex-start"
       mx={mx || "auto"}
       my={my || 24}
       w={w || ["100%", "80%"]}

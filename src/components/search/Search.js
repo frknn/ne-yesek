@@ -8,8 +8,6 @@ import LoadingSpinner from '../loading-spinner/LoadingSpinner';
 
 const Search = () => {
 
-  console.log('SEARCH COMPONENT RE-RENDERING')
-
   const [searchString, setSearchString] = useState('')
   const [recipes, setRecipes] = useState([])
   const [isSearching, setIsSearching] = useState(false)
@@ -23,9 +21,9 @@ const Search = () => {
       setIsSearching(true)
       setRecipes([])
       getRecipesByTitle(debouncedTerm)
-        .then(recipes => {
+        .then(response => {
           setIsSearching(false)
-          setRecipes(recipes)
+          setRecipes(response.data)
         })
     } else {
       setRecipes([])
@@ -49,7 +47,7 @@ const Search = () => {
         </Text>
 
         <Input
-          value={searchString}
+          //value={searchString}
           onChange={e => setSearchString(e.target.value)}
           placeholder="Tarif adı..."
           focusBorderColor="darkRed"
@@ -67,13 +65,13 @@ const Search = () => {
         }
         {
           recipes.length ?
-            <>
+            <Box>
               <Heading color="lightRed" mt={12} textAlign="center" size="3xl">Tarifler</Heading>
               <RecipeCardList
                 my={4}
                 w="full"
                 recipes={recipes} />
-            </> : null
+            </Box> : null
         }
       </Box>
     </Flex>

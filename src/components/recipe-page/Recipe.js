@@ -47,7 +47,7 @@ const Recipe = ({recipe}) => {
               borderWidth="2px"
               borderColor="darkRed"
             />
-            <Link scroll={true}
+            <Link
               href={`/user/${recipe.owner._id}`}>
               <ChakraLink
                 fontWeight="semibold"

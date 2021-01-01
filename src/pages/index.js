@@ -1,11 +1,13 @@
+import { Heading } from "@chakra-ui/react"
 import Header from "../components/header/Header"
 import RecipeCardList from "../components/recipe-card-list/RecipeCardList"
+import { getAllRecipes } from '../services/recipeService'
 
-const Index = ({data}) => (
+const Index = (props) => (
   <>
     <Header />
     <RecipeCardList
-      recipes={data}
+      recipes={props.data}
       mx="auto"
       my={24}
       w={["100%", "80%"]}
@@ -14,14 +16,15 @@ const Index = ({data}) => (
   </>
 )
 
-export async function getServerSideProps(context){
+export async function getServerSideProps() {
 
-  const res = await fetch('http://localhost:5000/api/v1/recipes')
-  const data = await res.json()
-
+  const data = await getAllRecipes()
   return {
-    props: { data: data.data }
+    props: {
+      data: data.data
+    }
   }
+
 }
 
 export default Index

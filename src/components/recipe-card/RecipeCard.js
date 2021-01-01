@@ -38,7 +38,7 @@ const RecipeCard = (props) => {
     <WrapItem
       w={w || ["85%", "80%", "45%", "30%"]}
       m={4}
-      onClick={() => router.push(`/recipe/${recipe._id}`)}
+      onClick={() => router.push(`/recipe/${recipe._id}`).then(() => window.scrollTo(0, 0))}
     >
       <Box
         role="group"
@@ -50,6 +50,9 @@ const RecipeCard = (props) => {
         overflow="hidden">
 
         <Image
+          w="full"
+          h="200px"
+          objectFit="cover"
           src={recipe.coverPhoto}
           alt={"recipe cover photo"}
           transition="all 0.2s ease-in-out"

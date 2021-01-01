@@ -1,7 +1,7 @@
 import { Box, VStack } from '@chakra-ui/react'
 import CloseButton from '../../close-button/CloseButton'
 
-const ShareFormLayout = ({ children }) => {
+const ShareFormLayout = ({ children, handleSubmit }) => {
   return (
     <Box
       w={["100%", "100%", "80%", "60%"]}
@@ -12,6 +12,7 @@ const ShareFormLayout = ({ children }) => {
       m={["0 auto", "0rem auto", "1rem auto"]}
       p={[4, 8, 12]}
     >
+      <form onSubmit={handleSubmit}>
       <CloseButton />
       <VStack
         w="90%"
@@ -21,6 +22,7 @@ const ShareFormLayout = ({ children }) => {
       >
         {children}
       </VStack>
+      </form>
     </Box>
   );
 }
