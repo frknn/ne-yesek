@@ -15,7 +15,7 @@ const SmallScreenMenu = ({ menuItems }) => {
       <MenuList>
         {
           menuItems.map(menuItem => (
-            <MenuItem onClick={menuItem.onClick}>
+            <MenuItem onClick={menuItem.onClick} key={menuItem.text}>
               <Link href={menuItem.destination}>
                 {menuItem.text}
               </Link>

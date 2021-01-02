@@ -1,4 +1,4 @@
-import { ChevronDownIcon, ChevronUpIcon, CloseIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon, ChevronUpIcon, CloseIcon, PlusSquareIcon } from "@chakra-ui/icons";
 import {
   FormControl,
   FormLabel,
@@ -21,11 +21,10 @@ import {
   ListItem,
   useToast
 } from "@chakra-ui/react"
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/router";
 import ShareFormLayout from './subcomponents/ShareFormLayout'
 import { createRecipe, uploadImage } from '../../services/recipeService'
-import axios from 'axios'
 
 const ShareForm = () => {
 
@@ -43,6 +42,8 @@ const ShareForm = () => {
     'sıcak içecek'
   ]
 
+  const fileInputEl = useRef()
+
   const [currentStep, setCurrentStep] = useState('')
   const [recipeSteps, setRecipeSteps] = useState([])
   const [category, setCategory] = useState(categories[0])
@@ -53,6 +54,8 @@ const ShareForm = () => {
   const [cookTime, setCookTime] = useState(1)
   const [ingredients, setIngredients] = useState('')
   const [coverPhoto, setCoverPhoto] = useState('')
+
+  const [isImageLoading, setIsImageLoading] = useState(false)
 
   const router = useRouter()
   const toast = useToast()
@@ -81,6 +84,7 @@ const ShareForm = () => {
   const handleAddStep = () => {
     if (currentStep) {
       setRecipeSteps(recipeSteps.concat(currentStep))
+      setCurrentStep('')
     }
   }
 
@@ -88,10 +92,10 @@ const ShareForm = () => {
 
     const file = e.target.files[0]
 
-    if(!file) {
+    if (!file) {
       return
     }
-    
+
     if (file.size > 1048576) {
       toast({
         description: "Resim boyutu 1MB'tan küçük olmalıdır!",
@@ -101,7 +105,9 @@ const ShareForm = () => {
       return
     }
 
+    setIsImageLoading(true)
     const data = await uploadImage(file)
+    setIsImageLoading(false)
     console.log('DATA from uplaod service: ', data)
     setCoverPhoto(data.data.url)
   }
@@ -161,9 +167,11 @@ const ShareForm = () => {
       <Input
         type="file"
         accept="image/*"
+        display="none"
+        ref={fileInputEl}
         onChange={handleImageUpload}
       />
-      {coverPhoto && <Image borderRadius="xl" w="100%" src={coverPhoto} alt="uploaded recipe image" />}
+
       <FormControl id="title" isRequired>
         <FormLabel textAlign="center">Tarifiniz adı nedir?</FormLabel>
         <Input
@@ -178,7 +186,29 @@ const ShareForm = () => {
           fontWeight="semibold"
         />
       </FormControl>
-      <p>{title}</p>
+      <Button
+        variant="outline"
+        leftIcon={<PlusSquareIcon w={5} h={5} />}
+        isLoading={isImageLoading}
+        loadingText="Yükleniyor..."
+        onClick={() => fileInputEl.current.click()}
+        borderColor="darkRed"
+        color="darkRed"
+        _hover={{ bgColor: 'darkRed', color: 'lightGray' }}
+      >
+        Tarifinizin Fotoğrafını Yükleyin
+      </Button>
+      {
+        coverPhoto &&
+        <Image
+          objectFit="cover"
+          borderRadius="xl"
+          w="100%"
+          h={["220px", "360px"]}
+          src={coverPhoto}
+          alt="uploaded recipe image"
+        />
+      }
       <FormControl id="description" isRequired>
         <FormLabel
           textAlign="center"
@@ -193,7 +223,6 @@ const ShareForm = () => {
           textAlign="center"
         />
       </FormControl>
-      <p>{description}</p>
       <HStack align="flex-end">
         <FormControl id="amount" isRequired>
           <FormLabel fontSize="sm" mx={0} color="darkRed" borderBottom="2px solid" borderBottomColor="darkRed"
@@ -211,7 +240,6 @@ const ShareForm = () => {
             />
           </NumberInput>
         </FormControl>
-        <p>{amount}</p>
         <FormControl id="prepTime" isRequired>
           <FormLabel fontSize="sm" mx={0} color="darkRed" borderBottom="2px solid" borderBottomColor="darkRed"
             textAlign="center">Hazırlanma Süresi (dk.)</FormLabel>
@@ -228,7 +256,6 @@ const ShareForm = () => {
             />
           </NumberInput>
         </FormControl>
-        <p>{prepTime}</p>
         <FormControl id="cookTime" isRequired>
           <FormLabel fontSize="sm" mx={0} color="darkRed" borderBottom="2px solid" borderBottomColor="darkRed"
             textAlign="center">Pişme Süresi (dk.)</FormLabel>
@@ -245,7 +272,6 @@ const ShareForm = () => {
             />
           </NumberInput>
         </FormControl>
-        <p>{cookTime}</p>
       </HStack>
       <FormControl isRequired>
         <FormLabel>Tarifin kategorisini seçiniz.</FormLabel>
@@ -256,7 +282,6 @@ const ShareForm = () => {
             ))
           }
         </Select>
-        <p>{category}</p>
       </FormControl>
       <FormControl isRequired>
         <FormLabel>Malzemelerinizi adediyle beraber, virgülle ayırarak giriniz.</FormLabel>
@@ -266,9 +291,9 @@ const ShareForm = () => {
           value={ingredients}
           onChange={e => setIngredients(e.target.value)}
         />
-        <p>{ingredients}</p>
       </FormControl>
-      <FormControl isRequired>
+      <Heading>Tarif Adımları</Heading>
+      <FormControl>
         <FormLabel>Tarifinizi adım adım anlatın.</FormLabel>
         <InputGroup>
           <Input
@@ -287,7 +312,6 @@ const ShareForm = () => {
         </InputGroup>
       </FormControl>
       <OrderedList w="full" spacing={4}>
-        <Heading>Tarif Adımları</Heading>
         {recipeSteps.map((recipeStep, idx) =>
         (
           <ScaleFade in>
