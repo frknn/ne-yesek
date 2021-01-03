@@ -51,7 +51,7 @@ const RecipeCard = (props) => {
 
         <Image
           w="full"
-          h="200px"
+          h="220px"
           objectFit="cover"
           src={recipe.coverPhoto}
           alt={"recipe cover photo"}

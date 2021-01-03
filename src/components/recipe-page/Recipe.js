@@ -32,7 +32,7 @@ const Recipe = ({recipe}) => {
 
   return (
     <Container my={24} maxW={["100%", "90%", "70%"]} centerContent>
-      <VStack>
+      <VStack w="full">
         <Heading as="h1" fontSize={["4xl", "5xl", "6xl"]}>
           {recipe.title}
         </Heading>
@@ -42,7 +42,7 @@ const Recipe = ({recipe}) => {
 
           <HStack spacing={2}>
             <Avatar
-              size="md"
+              size="sm"
               src="https://cdn.pixabay.com/photo/2019/08/01/05/59/girl-4376755_960_720.jpg"
               borderWidth="2px"
               borderColor="darkRed"
@@ -84,7 +84,7 @@ const Recipe = ({recipe}) => {
 
         </HStack>
 
-        <Image w="full" borderRadius="xl" src={recipe.coverPhoto} alt={recipe.imgAlt} />
+        <Image w="full" maxH="80vh" objectFit="cover" borderRadius="xl" src={recipe.coverPhoto} alt={recipe.imgAlt} />
 
         <HStack
           spacing={1}

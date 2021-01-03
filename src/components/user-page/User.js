@@ -1,51 +1,83 @@
-import { Box, Flex, Heading, Image, VStack, Tabs, TabList, TabPanels, Tab, TabPanel, Text } from "@chakra-ui/react";
-import axios from "axios";
+import { PlusSquareIcon } from "@chakra-ui/icons";
+import { Box, Flex, Heading, Image, VStack, Tabs, TabList, TabPanels, Tab, TabPanel, Text, useToast } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import RecipeCardList from '../recipe-card-list/RecipeCardList'
+import UploadButton from '../upload-button/UploadButton'
+import { uploadImage } from '../../services/recipeService'
+import { updateUser } from '../../services/userService'
 
 const User = ({ user }) => {
 
-  // const user = {
-  //   profilePicture: "https://cdn.pixabay.com/photo/2019/08/01/05/59/girl-4376755_960_720.jpg",
-  //   role: "user",
-  //   favoriteRecipes: [
-  //     {
-  //       imgUrl: "../../../pancake.jpg",
-  //       imgAlt: "bruh",
-  //       title: "Recipe Title",
-  //       desc: "Lorem ipsum dolor sit amet consectetur.",
-  //       category: "category1",
-  //       prepTime: "15 dk.",
-  //       cookTime: "20 dk.",
-  //       amount: "4",
-  //       owner: {
-  //         name: 'Owner Name',
-  //         profilePicture: "https://cdn.pixabay.com/photo/2019/08/01/05/59/girl-4376755_960_720.jpg"
-  //       },
-  //       fav: false,
-  //     }
-  //   ],
-  //   name: "Furkan",
-  //   lastName: "Setbaşı",
-  //   email: "frkn123@gmail.com",
-  //   recipes: [
-  //     {
-  //       imgUrl: "../../../pancake.jpg",
-  //       imgAlt: "bruh",
-  //       title: "Recipe Title",
-  //       desc: "Lorem ipsum dolor sit amet consectetur.",
-  //       category: "category1",
-  //       prepTime: "15 dk.",
-  //       cookTime: "20 dk.",
-  //       amount: "4",
-  //       owner: {
-  //         name: 'Owner Name',
-  //         profilePicture: "https://cdn.pixabay.com/photo/2019/08/01/05/59/girl-4376755_960_720.jpg"
-  //       },
-  //       fav: false,
-  //     }
-  //   ]
-  // }
+  const toast = useToast()
+  const router = useRouter()
+
+  const [onOwnProfile, setOnOwnProfile] = useState(false)
+  const [isImageLoading, setIsImageLoading] = useState(false)
+  const [userProfilePicture, setUserProfilePicture] = useState('')
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0]
+
+    if (!file) {
+      return
+    }
+    if (file.size > 1048576) {
+      toast({
+        description: "Resim boyutu 1MB'tan küçük olmalıdır!",
+        isClosable: true,
+        status: 'error'
+      })
+      return
+    }
+
+    const allowedFileTypes = ['image/png', 'image/jpg', 'image/jpeg']
+    if (!allowedFileTypes.includes(file.type)) {
+      toast({
+        description: 'Sadece JPG, JPEG ve PNG türünde dosya yükleyebilirsiniz!',
+        status: 'error',
+        isClosable: true
+      })
+      return
+    }
+
+    setIsImageLoading(true)
+
+    const imageData = await uploadImage(file)
+
+    if (imageData.status === 200) {
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'))
+
+      const userData = await updateUser({
+        profilePicture: imageData.data.url
+      }, currentUser.id)
+
+      if (userData.success) {
+        toast({
+          description: 'Profil fotoğrafınız başarıyla güncellendi!',
+          status: 'success',
+          isClosable: true
+        })
+        setUserProfilePicture(imageData.data.url)
+      } else {
+        toast({
+          description: 'Bir hata oluştu, lütfen tekrar deneyin!',
+          status: 'error',
+          isClosable: true
+        })
+      }
+    }
+    setIsImageLoading(false)
+  }
+
+  useEffect(() => {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'))
+    const userIdRouteParam = router.query.id
+
+    if (currentUser && (currentUser.id === userIdRouteParam)) {
+      setOnOwnProfile(true)
+    }
+  }, [])
 
   return (
     <Flex my={24}
@@ -64,12 +96,25 @@ const User = ({ user }) => {
             borderRadius="full"
           >
             <Image
-              src="https://cdn.pixabay.com/photo/2019/08/01/05/59/girl-4376755_960_720.jpg"
+              objectFit="cover"
+              src={userProfilePicture || user.profilePicture}
               alt="user profile picture"
               borderRadius="full"
               boxSize={["150px", "175px", "200px", "225px"]}
             />
           </Box>
+
+          {
+            onOwnProfile
+            &&
+            <UploadButton
+              text="Profil Fotoğrafı Yükle"
+              icon={<PlusSquareIcon boxSize={5} />}
+              isImageLoading={isImageLoading}
+              handleImageUpload={handleImageUpload}
+            />
+          }
+
           <Heading
             color="darkRed"
           >

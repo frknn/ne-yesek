@@ -20,7 +20,9 @@ export async function getServerSideProps(context) {
   })
 
   return {
-    props: { user: res.data.data }
+    props: { 
+      user: res.data.data,
+    }
   }
 }
 

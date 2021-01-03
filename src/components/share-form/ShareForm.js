@@ -25,6 +25,7 @@ import { useState, useRef } from "react";
 import { useRouter } from "next/router";
 import ShareFormLayout from './subcomponents/ShareFormLayout'
 import { createRecipe, uploadImage } from '../../services/recipeService'
+import UploadButton from "../upload-button/UploadButton";
 
 const ShareForm = () => {
 
@@ -95,12 +96,21 @@ const ShareForm = () => {
     if (!file) {
       return
     }
-
     if (file.size > 1048576) {
       toast({
         description: "Resim boyutu 1MB'tan küçük olmalıdır!",
         isClosable: true,
         status: 'error'
+      })
+      return
+    }
+
+    const allowedFileTypes = ['image/png', 'image/jpg', 'image/jpeg']
+    if (!allowedFileTypes.includes(file.type)) {
+      toast({
+        description: 'Sadece JPG, JPEG ve PNG türünde dosya yükleyebilirsiniz!',
+        status: 'error',
+        isClosable: true
       })
       return
     }
@@ -163,14 +173,8 @@ const ShareForm = () => {
   return (
 
     <ShareFormLayout handleSubmit={handleSubmit}>
+
       <Heading>Nefis bir tarif paylaşın!</Heading>
-      <Input
-        type="file"
-        accept="image/*"
-        display="none"
-        ref={fileInputEl}
-        onChange={handleImageUpload}
-      />
 
       <FormControl id="title" isRequired>
         <FormLabel textAlign="center">Tarifiniz adı nedir?</FormLabel>
@@ -186,18 +190,14 @@ const ShareForm = () => {
           fontWeight="semibold"
         />
       </FormControl>
-      <Button
-        variant="outline"
-        leftIcon={<PlusSquareIcon w={5} h={5} />}
-        isLoading={isImageLoading}
-        loadingText="Yükleniyor..."
-        onClick={() => fileInputEl.current.click()}
-        borderColor="darkRed"
-        color="darkRed"
-        _hover={{ bgColor: 'darkRed', color: 'lightGray' }}
-      >
-        Tarifinizin Fotoğrafını Yükleyin
-      </Button>
+
+      <UploadButton
+        handleImageUpload={handleImageUpload}
+        isImageLoading={isImageLoading}
+        icon={<PlusSquareIcon w={5} h={5} />}
+        text="Tarifinizin fotoğrafını yükleyin"
+      />
+
       {
         coverPhoto &&
         <Image
@@ -209,6 +209,7 @@ const ShareForm = () => {
           alt="uploaded recipe image"
         />
       }
+
       <FormControl id="description" isRequired>
         <FormLabel
           textAlign="center"
@@ -223,7 +224,9 @@ const ShareForm = () => {
           textAlign="center"
         />
       </FormControl>
+
       <HStack align="flex-end">
+
         <FormControl id="amount" isRequired>
           <FormLabel fontSize="sm" mx={0} color="darkRed" borderBottom="2px solid" borderBottomColor="darkRed"
             textAlign="center">Kaç kişilik?</FormLabel>
@@ -240,6 +243,7 @@ const ShareForm = () => {
             />
           </NumberInput>
         </FormControl>
+
         <FormControl id="prepTime" isRequired>
           <FormLabel fontSize="sm" mx={0} color="darkRed" borderBottom="2px solid" borderBottomColor="darkRed"
             textAlign="center">Hazırlanma Süresi (dk.)</FormLabel>
@@ -256,6 +260,7 @@ const ShareForm = () => {
             />
           </NumberInput>
         </FormControl>
+
         <FormControl id="cookTime" isRequired>
           <FormLabel fontSize="sm" mx={0} color="darkRed" borderBottom="2px solid" borderBottomColor="darkRed"
             textAlign="center">Pişme Süresi (dk.)</FormLabel>
@@ -272,7 +277,9 @@ const ShareForm = () => {
             />
           </NumberInput>
         </FormControl>
+
       </HStack>
+
       <FormControl isRequired>
         <FormLabel>Tarifin kategorisini seçiniz.</FormLabel>
         <Select value={category} onChange={e => setCategory(e.target.value)} focusBorderColor="lightRed">
@@ -283,6 +290,7 @@ const ShareForm = () => {
           }
         </Select>
       </FormControl>
+
       <FormControl isRequired>
         <FormLabel>Malzemelerinizi adediyle beraber, virgülle ayırarak giriniz.</FormLabel>
         <Textarea
@@ -292,7 +300,9 @@ const ShareForm = () => {
           onChange={e => setIngredients(e.target.value)}
         />
       </FormControl>
+
       <Heading>Tarif Adımları</Heading>
+
       <FormControl>
         <FormLabel>Tarifinizi adım adım anlatın.</FormLabel>
         <InputGroup>
@@ -311,6 +321,7 @@ const ShareForm = () => {
           </InputRightElement>
         </InputGroup>
       </FormControl>
+
       <OrderedList w="full" spacing={4}>
         {recipeSteps.map((recipeStep, idx) =>
         (
@@ -352,6 +363,7 @@ const ShareForm = () => {
         )
         )}
       </OrderedList>
+
       <Button
         type="submit"
         bgColor="lightRed"
@@ -360,6 +372,7 @@ const ShareForm = () => {
         size="lg"
         _hover={{ bgColor: 'darkRed' }}
       >Gönder</Button>
+
     </ShareFormLayout>
 
   );
