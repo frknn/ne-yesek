@@ -1,4 +1,5 @@
 import axios from 'axios'
+import useLocalStorageValue from '../utils/hooks/useLocalStorageValue'
 
 const URL = `http://localhost:5000/api/v1/recipes`
 
@@ -23,7 +24,7 @@ export const getAllRecipes = async () => {
 
 export const createRecipe = async (recipeObject) => {
   try {
-    const token = JSON.parse(localStorage.getItem('accessToken'))
+    const token = useLocalStorageValue('accessToken')
 
     const response = await axios.post(URL, recipeObject, {
       headers: {
@@ -38,15 +39,45 @@ export const createRecipe = async (recipeObject) => {
   }
 }
 
+export const updateRecipe = async (recipeObject, id) => {
+  try {
+    const token = useLocalStorageValue('accessToken')
+
+    const response = await axios.put(`${URL}/${id}`, recipeObject, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      }
+    })
+    return response.data
+
+  } catch (error) {
+    error.response.data
+  }
+}
+
+export const deleteRecipe = async (id) => {
+  try {
+    const token = useLocalStorageValue('accessToken')
+    const response = await axios.delete(`${URL}/${id}`, {
+      headers: { 'Authorization': 'Bearer ' + token }
+    })
+    console.log(response.data)
+    return response.data
+  } catch (error) {
+    return error.response.data
+  }
+}
+
 export const uploadImage = async (image) => {
   try {
     console.log('SERVICE FUNCTION STARTED')
-     const url = "https://api.cloudinary.com/v1_1/dgxfhzjli/upload";
+    const url = "https://api.cloudinary.com/v1_1/dgxfhzjli/upload";
 
     const formData = new FormData()
     formData.append('file', image)
     formData.append('upload_preset', 'ml_default')
-    
+
     const response = await axios.post(url, formData)
     console.log('SERVICE FUNCTION ENDED: ', response)
 

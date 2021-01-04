@@ -4,6 +4,7 @@ import LargeScreenMenu from './LargeScreenMenu'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { SearchIcon } from '@chakra-ui/icons'
+import useLocalStorageValue from '../../../utils/hooks/useLocalStorageValue'
 
 const HeaderMenu = () => {
 
@@ -55,9 +56,12 @@ const HeaderMenu = () => {
   ]
 
   useEffect(() => {
-    if (localStorage.getItem('currentUser') && localStorage.getItem('accessToken')) {
+    const currentUser = useLocalStorageValue('currentUser')
+    const accessToken = useLocalStorageValue('accessToken')
+
+    if (currentUser && accessToken) {
       const userProfileLink = {
-        destination: `/user/${JSON.parse(localStorage.getItem('currentUser'))._id}`,
+        destination: `/user/${currentUser._id}`,
         text: 'Profilim'
       }
       loggedInMenuItems.splice(loggedInMenuItems.length - 1, 0, userProfileLink)

@@ -1,44 +1,44 @@
 import { StarIcon, TimeIcon } from "@chakra-ui/icons";
-import { Avatar, Box, Flex, TagLeftIcon, Link as ChakraLink, Heading, HStack, IconButton, Image, Text, useTheme, Tag, TagLabel, WrapItem, VStack } from "@chakra-ui/react";
+import { Avatar, Box, Button, Flex, TagLeftIcon, Link as ChakraLink, Heading, HStack, IconButton, Image, Text, Tag, WrapItem, useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import Link from 'next/link';
 import { useRouter } from 'next/router'
+import { deleteRecipe } from '../../services/recipeService'
 
-const RecipeCard = (props) => {
+const RecipeCard = ({ w, recipe, onProfile, onOwnProfile }) => {
 
   const router = useRouter()
-
-  const { w, recipe } = props
+  const toast = useToast()
 
   const handleFav = () => {
-    const newRecipe = { ...recipe, fav: !recipeState.fav }
-    setRecipeState(newRecipe)
+    
   }
 
-  // const recipe = {
-  //   imgUrl: "../../../pancake.jpg",
-  //   imgAlt: "bruh",
-  //   title: "Recipe Title",
-  //   desc: "Lorem ipsum dolor sit amet consectetur.",
-  //   category: "category1",
-  //   prepTime: "15 dk.",
-  //   cookTime: "20 dk.",
-  //   amount: "4",
-  //   owner: {
-  //     name: 'Owner Name',
-  //     profilePicture: "https://cdn.pixabay.com/photo/2019/08/01/05/59/girl-4376755_960_720.jpg"
-  //   },
-  //   fav: false,
-  // }
+  const handleDeleteRecipe = async (id) => {
+    console.log('DELETE HADNLER RUN')
+    const deletedRecipe = await deleteRecipe(id)
 
-  //const [recipeState, setRecipeState] = useState(recipe)
+    console.log('DELETED RECIOE: ', deletedRecipe)
 
+    if (deletedRecipe.success) {
+      toast({
+        description: 'Tarifiniz silindi!',
+        isClosable: true
+      })
+      router.reload()
+    } else {
+      toast({
+        description: 'Tarifi silerken bir hata oluştu, lütfen tekrar deneyin!',
+        status: 'error',
+        isClosable: true
+      })
+    }
+  }
 
   return (
     <WrapItem
       w={w || ["85%", "80%", "45%", "30%"]}
       m={4}
-      onClick={() => router.push(`/recipe/${recipe._id}`).then(() => window.scrollTo(0, 0))}
     >
       <Box
         role="group"
@@ -57,6 +57,7 @@ const RecipeCard = (props) => {
           alt={"recipe cover photo"}
           transition="all 0.2s ease-in-out"
           _groupHover={{ transform: "scale(1.1)" }}
+          onClick={() => router.push(`/recipe/${recipe._id}`).then(() => window.scrollTo(0, 0))}
         />
 
         <Box
@@ -68,7 +69,11 @@ const RecipeCard = (props) => {
             justify="space-between"
             align="center"
           >
-            <Heading fontSize={["3xl"]}>{recipe.title}</Heading>
+            <Heading
+              fontSize={["3xl"]}
+              onClick={() => router.push(`/recipe/${recipe._id}`).then(() => window.scrollTo(0, 0))}
+            >{recipe.title}
+            </Heading>
             <IconButton
               bgColor="lightGray"
               _hover={{ bgColor: "lightGray" }}
@@ -85,7 +90,9 @@ const RecipeCard = (props) => {
                 />
               } />
           </Flex>
-          <Text>{recipe.description}</Text>
+          <Text
+            onClick={() => router.push(`/recipe/${recipe._id}`).then(() => window.scrollTo(0, 0))}
+          >{recipe.description}</Text>
 
           <HStack spacing={1} mt={4} mb={8}>
             <Tag size="sm" bgColor="lightRed" color="lightGray">{recipe.amount} kişilik</Tag>
@@ -93,7 +100,7 @@ const RecipeCard = (props) => {
             <Tag size="sm" bgColor="lightRed" color="lightGray"><TagLeftIcon as={TimeIcon} />{recipe.cookTime}</Tag>
           </HStack>
 
-          {!props.onProfile &&
+          {!onProfile &&
             <HStack spacing={1}>
               <Avatar
                 size="sm"
@@ -111,7 +118,15 @@ const RecipeCard = (props) => {
                   {recipe.owner.name + " " + recipe.owner.lastName}
                 </ChakraLink>
               </Link>
-            </HStack>}
+            </HStack>
+          }
+          {
+            onOwnProfile &&
+            <HStack w="full">
+              <Button onClick={() => router.push(`/update/${recipe._id}`)}  colorScheme="yellow">Güncelle</Button>
+              <Button onClick={() => handleDeleteRecipe(recipe._id)} colorScheme="red">Sil</Button>
+            </HStack>
+          }
         </Box>
       </Box>
     </WrapItem>

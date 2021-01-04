@@ -1,7 +1,8 @@
-import {  useToast } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import ShareForm from "../components/share-form/ShareForm";
+import useLocalStorageValue from "../utils/hooks/useLocalStorageValue";
 
 const share = () => {
   const [renderPage, setRenderPage] = useState(false)
@@ -9,7 +10,8 @@ const share = () => {
   const router = useRouter()
 
   useEffect(() => {
-    if (localStorage.getItem('accessToken')) {
+    const accessToken = useLocalStorageValue('accessToken')
+    if (accessToken) {
       setRenderPage(true)
     } else {
       toast({

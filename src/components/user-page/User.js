@@ -6,6 +6,8 @@ import RecipeCardList from '../recipe-card-list/RecipeCardList'
 import UploadButton from '../upload-button/UploadButton'
 import { uploadImage } from '../../services/recipeService'
 import { updateUser } from '../../services/userService'
+import useLocalStorageValue from "../../utils/hooks/useLocalStorageValue";
+import useValidateImageFile from "../../utils/hooks/useValidateImageFile";
 
 const User = ({ user }) => {
 
@@ -22,19 +24,10 @@ const User = ({ user }) => {
     if (!file) {
       return
     }
-    if (file.size > 1048576) {
+    const errorText = useValidateImageFile(file)
+    if (errorText) {
       toast({
-        description: "Resim boyutu 1MB'tan küçük olmalıdır!",
-        isClosable: true,
-        status: 'error'
-      })
-      return
-    }
-
-    const allowedFileTypes = ['image/png', 'image/jpg', 'image/jpeg']
-    if (!allowedFileTypes.includes(file.type)) {
-      toast({
-        description: 'Sadece JPG, JPEG ve PNG türünde dosya yükleyebilirsiniz!',
+        description: errorText,
         status: 'error',
         isClosable: true
       })
@@ -46,11 +39,12 @@ const User = ({ user }) => {
     const imageData = await uploadImage(file)
 
     if (imageData.status === 200) {
-      const currentUser = JSON.parse(localStorage.getItem('currentUser'))
-
-      const userData = await updateUser({
-        profilePicture: imageData.data.url
-      }, currentUser.id)
+      const currentUser = useLocalStorageValue('currentUser')
+      const userData = await updateUser(
+        {
+          profilePicture: imageData.data.url
+        },
+        currentUser.id)
 
       if (userData.success) {
         toast({
@@ -71,13 +65,17 @@ const User = ({ user }) => {
   }
 
   useEffect(() => {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'))
+    const currentUser = useLocalStorageValue('currentUser')
     const userIdRouteParam = router.query.id
 
     if (currentUser && (currentUser.id === userIdRouteParam)) {
+      console.log('CurrentUser: ', currentUser)
+      console.log('CurrentUser.id: ', currentUser.id)
+      console.log('userIdRouteParam: ', userIdRouteParam)
+      console.log('ownProfile?', currentUser.id === userIdRouteParam)
       setOnOwnProfile(true)
     }
-  }, [])
+  }, [router.query.id])
 
   return (
     <Flex my={24}
@@ -139,6 +137,7 @@ const User = ({ user }) => {
                 cardWidth={["100%", "100%", "100%", "43%"]}
                 recipes={user.recipes}
                 onProfile={true}
+                onOwnProfile={onOwnProfile}
               />
             </TabPanel>
             <TabPanel p={0}>
@@ -146,9 +145,10 @@ const User = ({ user }) => {
                 mx="auto"
                 my={4}
                 w="100%"
-                cardWidth={["100%", "100%", "100%", "43%"]}
+                cardWidth={["100%", "100%", "100%", "35%"]}
                 recipes={user.recipesSaved}
                 onProfile={true}
+                onOwnProfile={onOwnProfile}
               />
             </TabPanel>
           </TabPanels>

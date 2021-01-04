@@ -18,7 +18,6 @@ export async function getServerSideProps(context) {
       'Content-Type': 'application/json'
     }
   })
-
   return {
     props: { 
       user: res.data.data,

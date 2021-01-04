@@ -1,11 +1,12 @@
 import axios from 'axios'
+import useLocalStorageValue from '../utils/hooks/useLocalStorageValue'
 
 const URL = 'http://localhost:5000/api/v1/users'
 
 export const updateUser = async (data, id) => {
   try {
-    const token = JSON.parse(localStorage.getItem('accessToken'))
-    
+    const token = useLocalStorageValue('accessToken')
+
     const response = await axios.put(`${URL}/${id}`, data, {
       headers: {
         'Authorization': 'Bearer ' + token,

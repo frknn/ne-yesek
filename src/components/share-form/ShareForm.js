@@ -21,13 +21,14 @@ import {
   ListItem,
   useToast
 } from "@chakra-ui/react"
-import { useState, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { createRecipe, updateRecipe, uploadImage } from '../../services/recipeService'
 import ShareFormLayout from './subcomponents/ShareFormLayout'
-import { createRecipe, uploadImage } from '../../services/recipeService'
 import UploadButton from "../upload-button/UploadButton";
+import useValidateImageFile from '../../utils/hooks/useValidateImageFile'
 
-const ShareForm = () => {
+const ShareForm = ({ recipeToBeUpdated }) => {
 
   const categories = [
     'kahvaltılık',
@@ -42,8 +43,6 @@ const ShareForm = () => {
     'soğuk içecek',
     'sıcak içecek'
   ]
-
-  const fileInputEl = useRef()
 
   const [currentStep, setCurrentStep] = useState('')
   const [recipeSteps, setRecipeSteps] = useState([])
@@ -61,6 +60,21 @@ const ShareForm = () => {
   const router = useRouter()
   const toast = useToast()
 
+  useEffect(() => {
+    if (recipeToBeUpdated) {
+      const { title, description, category, amount, prepTime, cookTime, ingredients, coverPhoto, recipeSteps } = recipeToBeUpdated
+
+      setTitle(title)
+      setDescription(description)
+      setAmount(amount)
+      setPrepTime(prepTime)
+      setCookTime(cookTime)
+      setIngredients(ingredients.join(','))
+      setCoverPhoto(coverPhoto)
+      setCategory(category)
+      setRecipeSteps(recipeSteps)
+    }
+  }, [])
 
   const handleMove = (direction, index) => {
     let tempArr = [...recipeSteps]
@@ -96,24 +110,17 @@ const ShareForm = () => {
     if (!file) {
       return
     }
-    if (file.size > 1048576) {
+    const errorText = useValidateImageFile(file)
+    if (errorText) {
       toast({
-        description: "Resim boyutu 1MB'tan küçük olmalıdır!",
-        isClosable: true,
-        status: 'error'
-      })
-      return
-    }
-
-    const allowedFileTypes = ['image/png', 'image/jpg', 'image/jpeg']
-    if (!allowedFileTypes.includes(file.type)) {
-      toast({
-        description: 'Sadece JPG, JPEG ve PNG türünde dosya yükleyebilirsiniz!',
+        description: errorText,
         status: 'error',
         isClosable: true
       })
       return
     }
+
+    //useValidateImageFile(file)
 
     setIsImageLoading(true)
     const data = await uploadImage(file)
@@ -132,9 +139,7 @@ const ShareForm = () => {
         duration: 9000,
         status: 'error'
       })
-
       return
-
     } else {
       const recipeObject = {
         coverPhoto,
@@ -148,11 +153,15 @@ const ShareForm = () => {
         recipeSteps,
       }
 
-      const data = await createRecipe(recipeObject)
-
+      let data;
+      if (recipeToBeUpdated) {
+        data = await updateRecipe(recipeObject, recipeToBeUpdated._id)
+      } else {
+        data = await createRecipe(recipeObject)
+      }
       if (data.success) {
         toast({
-          description: 'Tarifiniz paylaşıldı!',
+          description: recipeToBeUpdated ? 'Tarifiniz güncellendi!' : 'Tarifiniz paylaşıldı!',
           duration: 9000,
           isClosable: true,
           status: 'success'
@@ -168,6 +177,10 @@ const ShareForm = () => {
         })
       }
     }
+  }
+
+  const handleUpdate = async (e) => {
+
   }
 
   return (
@@ -364,14 +377,24 @@ const ShareForm = () => {
         )}
       </OrderedList>
 
-      <Button
-        type="submit"
-        bgColor="lightRed"
-        color="lightGray"
-        w="full"
-        size="lg"
-        _hover={{ bgColor: 'darkRed' }}
-      >Gönder</Button>
+      { recipeToBeUpdated ?
+        <Button
+          onClick={handleSubmit}
+          colorScheme="yellow"
+          w="full"
+          size="lg"
+        >Güncelle
+        </Button>
+        :
+        <Button
+          type="submit"
+          bgColor="lightRed"
+          color="lightGray"
+          w="full"
+          size="lg"
+          _hover={{ bgColor: 'darkRed' }}
+        >Gönder</Button>
+      }
 
     </ShareFormLayout>
 
