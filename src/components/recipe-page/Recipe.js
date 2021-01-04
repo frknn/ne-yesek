@@ -1,34 +1,23 @@
+import { useState, useEffect } from "react";
 import { Container, Avatar, Link as ChakraLink, Heading, HStack, IconButton, Image, Tag, TagLabel, Text, VStack, UnorderedList, ListItem, ListIcon, OrderedList, Divider } from "@chakra-ui/react";
-import Link from 'next/link';
 import { StarIcon, CheckIcon } from '@chakra-ui/icons'
-import { useState } from "react";
+import Link from 'next/link';
+import useLocalStorageValue from '../../utils/hooks/useLocalStorageValue'
 
-const Recipe = ({recipe}) => {
+const Recipe = ({ recipe }) => {
+
+  const [favorited, setFavorited] = useState(false)
 
   const handleFav = () => {
-    const newRecipe = { ...recipe, fav: !recipeState.fav }
-    setRecipeState(newRecipe)
+    setFavorited(prevState => !prevState)
+
   }
 
-  // const recipe = {
-  //   imgUrl: "../../../pancake.jpg",
-  //   imgAlt: "bruh",
-  //   title: "Recipe Title",
-  //   desc: "Lorem ipsum dolor sit amet consectetur.",
-  //   category: "category1",
-  //   prepTime: "15 dk.",
-  //   cookTime: "20 dk.",
-  //   amount: "4",
-  //   ingredients: ['asfas', 'asfasf', 'asfasf', 'asfasf', 'asfasf', 'asfsagad'],
-  //   recipeSteps: ['ajshasld', 'asfjahsşlfhasf', 'askfjbasfjkshalf', 'asklfaslkfas'],
-  //   owner: {
-  //     name: 'Owner Name',
-  //     profilePicture: "https://cdn.pixabay.com/photo/2019/08/01/05/59/girl-4376755_960_720.jpg"
-  //   },
-  //   fav: false,
-  // }
-
-  const [recipeState, setRecipeState] = useState(recipe)
+  useEffect(() => {
+    const currentUser = useLocalStorageValue('currentUser')
+    let isFavorited = currentUser.recipesSaved.some(r => r._id === recipe._id)
+    if (isFavorited) setFavorited(true)
+  }, [])
 
   return (
     <Container my={24} maxW={["100%", "90%", "70%"]} centerContent>
@@ -43,9 +32,11 @@ const Recipe = ({recipe}) => {
           <HStack spacing={2}>
             <Avatar
               size="sm"
-              src="https://cdn.pixabay.com/photo/2019/08/01/05/59/girl-4376755_960_720.jpg"
-              borderWidth="2px"
+              src={recipe.owner.profilePicture}
               borderColor="darkRed"
+              showBorder={true}
+              loading="lazy"
+              alt="user profile picture"
             />
             <Link
               href={`/user/${recipe.owner._id}`}>
@@ -74,7 +65,7 @@ const Recipe = ({recipe}) => {
               onClick={handleFav}
               icon={
                 <StarIcon
-                  color={recipeState.fav ?
+                  color={favorited ?
                     "darkRed" :
                     "gray.400"}
                   _hover={{ color: "lightRed" }}
@@ -84,7 +75,7 @@ const Recipe = ({recipe}) => {
 
         </HStack>
 
-        <Image w="full" maxH="80vh" objectFit="cover" borderRadius="xl" src={recipe.coverPhoto} alt={recipe.imgAlt} />
+        <Image w="full" maxH="80vh" objectFit="cover" borderRadius="xl" src={recipe.coverPhoto} alt={recipe.title} />
 
         <HStack
           spacing={1}
@@ -95,39 +86,39 @@ const Recipe = ({recipe}) => {
           <VStack >
             <Text w="full"
               textAlign="center"
-              borderBottomColor="lightRed"
               borderBottomWidth="2px"
               fontWeight="bold"
-              color="lightRed"
-            >Kaç kişilik?
-            </Text>
+              color="darkRed"
+              borderBottomColor="darkRed"
+            >
+              Kaç kişilik?</Text>
             <Text>{recipe.amount}</Text>
           </VStack>
           <VStack>
             <Text w="full"
               textAlign="center"
-              borderBottomColor="lightRed"
               borderBottomWidth="2px"
               fontWeight="bold"
-              color="lightRed">Hazırlanma Süresi</Text>
+              borderBottomColor="darkRed"
+              color="darkRed">
+              Hazırlanma Süresi</Text>
             <Text>{recipe.prepTime}</Text>
           </VStack>
           <VStack>
             <Text w="full"
               textAlign="center"
-              borderBottomColor="lightRed"
+              borderBottomColor="darkRed"
               borderBottomWidth="2px"
               fontWeight="bold"
-              color="lightRed"
-            >Pişme Süresi
-            </Text>
+              color="darkRed"
+            >Pişme Süresi</Text>
             <Text>{recipe.cookTime}</Text>
           </VStack>
         </HStack>
 
         <Divider py={4} />
 
-        <Heading as="h3"
+        <Heading as="h2"
           textAlign="center"
           w="full"
           pt={4}
@@ -146,7 +137,7 @@ const Recipe = ({recipe}) => {
           listStyleType="none"
           listStylePos="inside">
           {recipe.ingredients.map(ingredient => (
-            <ListItem>
+            <ListItem key={ingredient}>
               <ListIcon as={CheckIcon} color="darkRed" />
               {ingredient}
             </ListItem>
@@ -166,7 +157,7 @@ const Recipe = ({recipe}) => {
           </Heading>
         <OrderedList w="full" px={8} spacing={4}>
           {recipe.recipeSteps.map(recipeStep => (
-            <ListItem>{recipeStep}</ListItem>
+            <ListItem key={recipeStep}>{recipeStep}</ListItem>
           ))}
         </OrderedList>
       </VStack>

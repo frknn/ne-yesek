@@ -69,11 +69,9 @@ const User = ({ user }) => {
     const userIdRouteParam = router.query.id
 
     if (currentUser && (currentUser.id === userIdRouteParam)) {
-      console.log('CurrentUser: ', currentUser)
-      console.log('CurrentUser.id: ', currentUser.id)
-      console.log('userIdRouteParam: ', userIdRouteParam)
-      console.log('ownProfile?', currentUser.id === userIdRouteParam)
       setOnOwnProfile(true)
+    } else {
+      setOnOwnProfile(false)
     }
   }, [router.query.id])
 

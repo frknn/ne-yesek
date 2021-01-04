@@ -4,8 +4,9 @@ import { ColorModeScript } from '@chakra-ui/react'
 export default class Document extends NextDocument {
   render() {
     return (
-      <Html>
+      <Html lang="en">
         <Head />
+        <link rel="icon" sizes="32x32" href="/NeYesekLogo.svg"/>
         <body>
           {/* Make Color mode to persists when you refresh the page. */}
           <ColorModeScript />

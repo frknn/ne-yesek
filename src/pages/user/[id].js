@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import axios from "axios";
 import Header from "../../components/header/Header";
 import User from "../../components/user-page/User";
@@ -5,6 +6,11 @@ import User from "../../components/user-page/User";
 const user = ({ user }) => {
   return (
     <>
+      <Head>
+        <title>NeYesek | {user.name + ' ' + user.lastName}</title>
+        <meta name="description" content={user.name + ' ' + user.lastName + ' profili'} />
+        <meta name="keywords" content="yemek, tarif, yemek tarifleri" />
+      </Head>
       <Header />
       <User user={user} />
     </>
@@ -19,7 +25,7 @@ export async function getServerSideProps(context) {
     }
   })
   return {
-    props: { 
+    props: {
       user: res.data.data,
     }
   }

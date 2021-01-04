@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useToast } from "@chakra-ui/react";
@@ -20,7 +21,13 @@ const update = ({ recipe }) => {
   }, [])
 
   return (
-    renderPage ? <ShareForm recipeToBeUpdated={recipe} /> : null
+    renderPage ? <>
+      <Head>
+        <title>NeYesek | Güncelle</title>
+        <meta name="description" content="Yemek Tarifi güncelle" />
+      </Head>
+      <ShareForm recipeToBeUpdated={recipe} />
+    </> : null
   );
 }
 

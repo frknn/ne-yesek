@@ -54,7 +54,7 @@ const RecipeCard = ({ w, recipe, onProfile, onOwnProfile }) => {
           h="220px"
           objectFit="cover"
           src={recipe.coverPhoto}
-          alt={"recipe cover photo"}
+          alt="recipe cover photo"
           transition="all 0.2s ease-in-out"
           _groupHover={{ transform: "scale(1.1)" }}
           onClick={() => router.push(`/recipe/${recipe._id}`).then(() => window.scrollTo(0, 0))}
@@ -104,9 +104,11 @@ const RecipeCard = ({ w, recipe, onProfile, onOwnProfile }) => {
             <HStack spacing={1}>
               <Avatar
                 size="sm"
-                src="https://cdn.pixabay.com/photo/2019/08/01/05/59/girl-4376755_960_720.jpg"
-                borderWidth="2px"
+                src={recipe.owner.profilePicture}
                 borderColor="darkRed"
+                showBorder={true}
+                loading="lazy"
+                alt="user profile picture"
               />
               <Link
                 href={`/user/${recipe.owner._id}`}>

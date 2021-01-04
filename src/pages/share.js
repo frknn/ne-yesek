@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
@@ -24,7 +25,14 @@ const share = () => {
     }
   }, [])
 
-  return renderPage ? <ShareForm /> : null
+  return renderPage ? <>
+    <Head>
+      <title>NeYesek | Tarif Paylaş</title>
+      <meta name="description" content="Yemek Tarifleri Paylaş" />
+      <meta name="keywords" content="yemek, tarif, yemek tarifleri, yemek tarifi paylaş" />
+    </Head>
+    <ShareForm />
+  </> : null
 }
 
 export default share;
