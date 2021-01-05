@@ -1,21 +1,48 @@
 import { useState, useEffect } from "react";
-import { Container, Avatar, Link as ChakraLink, Heading, HStack, IconButton, Image, Tag, TagLabel, Text, VStack, UnorderedList, ListItem, ListIcon, OrderedList, Divider } from "@chakra-ui/react";
+import { Container, Avatar, Link as ChakraLink, Heading, HStack, IconButton, Image, Tag, TagLabel, Text, VStack, UnorderedList, ListItem, ListIcon, OrderedList, Divider, useToast } from "@chakra-ui/react";
 import { StarIcon, CheckIcon } from '@chakra-ui/icons'
 import Link from 'next/link';
 import useLocalStorageValue from '../../utils/hooks/useLocalStorageValue'
+import { addRecipeToFavorites } from '../../services/userService'
 
 const Recipe = ({ recipe }) => {
+  const toast = useToast()
 
   const [favorited, setFavorited] = useState(false)
+  const [isFavButtonDisabled, setIsFavButtonDisabled] = useState(false)
 
-  const handleFav = () => {
+  const handleFav = async (recipeId) => {
+    setIsFavButtonDisabled(true)
     setFavorited(prevState => !prevState)
+    const response = await addRecipeToFavorites(recipeId)
+    if (!response.success) {
+      toast({
+        description: 'Bir hata oluştu, lütfen tekrar deneyin!',
+        status: 'error',
+        isClosable: true,
+        position: 'bottom-right'
+      })
+      setFavorited(prevState => !prevState)
+    } else {
+      toast({
+        description: favorited ? 'Tarif favorilerden çıkarıldı!' : 'Tarif favorilere eklendi',
+        status: favorited ? 'info' : 'success',
+        isClosable: true,
+        position: 'bottom-right'
 
+      })
+      localStorage.setItem('currentUser', JSON.stringify(response.data))
+    }
+    setIsFavButtonDisabled(false)
+    console.log('RESP: ', response)
   }
 
   useEffect(() => {
     const currentUser = useLocalStorageValue('currentUser')
-    let isFavorited = currentUser.recipesSaved.some(r => r._id === recipe._id)
+    console.log('CRU: ', currentUser)
+    console.log('RID: ', recipe._id)
+    let isFavorited = currentUser?.recipesSaved.some(r => r === recipe._id)
+    console.log('IS FAV:', isFavorited)
     if (isFavorited) setFavorited(true)
   }, [])
 
@@ -57,12 +84,13 @@ const Recipe = ({ recipe }) => {
               <TagLabel>{recipe.category}</TagLabel>
             </Tag>
             <IconButton
+              disabled={isFavButtonDisabled}
               bgColor="white"
               _hover={{ bgColor: "lightGray" }}
               _focus={{ boxShadow: "none" }}
               aria-label="favorilere ekle"
               size="md"
-              onClick={handleFav}
+              onClick={() => handleFav(recipe._id)}
               icon={
                 <StarIcon
                   color={favorited ?

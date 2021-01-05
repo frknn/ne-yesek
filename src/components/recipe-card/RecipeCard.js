@@ -1,17 +1,30 @@
 import { StarIcon, TimeIcon } from "@chakra-ui/icons";
 import { Avatar, Box, Button, Flex, TagLeftIcon, Link as ChakraLink, Heading, HStack, IconButton, Image, Text, Tag, WrapItem, useToast } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from 'next/link';
 import { useRouter } from 'next/router'
 import { deleteRecipe } from '../../services/recipeService'
+import useLocalStorageValue from '../../utils/hooks/useLocalStorageValue'
 
 const RecipeCard = ({ w, recipe, onProfile, onOwnProfile }) => {
 
   const router = useRouter()
   const toast = useToast()
 
-  const handleFav = () => {
+  const [ownRecipe, setOwnRecipe] = useState(false)
+
+  useEffect(() => {
+    const currentUser = useLocalStorageValue('currentUser')
     
+    if (currentUser?.recipes.some(r => r._id === recipe._id)) {
+      setOwnRecipe(true)
+    } else {
+      setOwnRecipe(false)
+    }
+  }, [])
+
+  const handleFav = () => {
+
   }
 
   const handleDeleteRecipe = async (id) => {
@@ -123,9 +136,9 @@ const RecipeCard = ({ w, recipe, onProfile, onOwnProfile }) => {
             </HStack>
           }
           {
-            onOwnProfile &&
+            (onOwnProfile && ownRecipe) &&
             <HStack w="full">
-              <Button onClick={() => router.push(`/update/${recipe._id}`)}  colorScheme="yellow">Güncelle</Button>
+              <Button onClick={() => router.push(`/update/${recipe._id}`)} colorScheme="yellow">Güncelle</Button>
               <Button onClick={() => handleDeleteRecipe(recipe._id)} colorScheme="red">Sil</Button>
             </HStack>
           }
