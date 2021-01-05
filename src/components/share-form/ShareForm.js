@@ -3,7 +3,7 @@ import {
   FormControl,
   FormLabel,
   Heading,
-  Image,
+  Img,
   Input,
   NumberInput,
   NumberInputField,
@@ -76,6 +76,7 @@ const ShareForm = ({ recipeToBeUpdated }) => {
     }
   }, [])
 
+
   const handleMove = (direction, index) => {
     let tempArr = [...recipeSteps]
     let tempVal = tempArr[index]
@@ -120,12 +121,9 @@ const ShareForm = ({ recipeToBeUpdated }) => {
       return
     }
 
-    //useValidateImageFile(file)
-
     setIsImageLoading(true)
     const data = await uploadImage(file)
     setIsImageLoading(false)
-    console.log('DATA from uplaod service: ', data)
     setCoverPhoto(data.data.url)
   }
 
@@ -140,46 +138,52 @@ const ShareForm = ({ recipeToBeUpdated }) => {
         status: 'error'
       })
       return
-    } else {
-      const recipeObject = {
-        coverPhoto,
-        title,
-        description,
-        amount,
-        category,
-        prepTime,
-        cookTime,
-        ingredients: ingredients.split(',').map(i => i.trim()),
-        recipeSteps,
-      }
-
-      let data;
-      if (recipeToBeUpdated) {
-        data = await updateRecipe(recipeObject, recipeToBeUpdated._id)
-      } else {
-        data = await createRecipe(recipeObject)
-      }
-      if (data.success) {
-        toast({
-          description: recipeToBeUpdated ? 'Tarifiniz güncellendi!' : 'Tarifiniz paylaşıldı!',
-          duration: 9000,
-          isClosable: true,
-          status: 'success'
-        })
-        router.push('/').then(() => window.scrollTo(0, 0))
-      } else {
-        toast({
-          description: 'Bir hata meydana geldi, lütfen tekrar deneyin!',
-          duration: 9000,
-          isClosable: true,
-          status: 'error',
-          position: 'top-right'
-        })
-      }
     }
-  }
+    if (amount > 999 || amount < 1 || prepTime > 999 || prepTime < 1 || cookTime > 999 || cookTime < 1) {
+      toast({
+        description: "Porsiyon, hazırlanma süresi veya pişirme süresi 1-999 aralığında olmalıdır!",
+        status: 'error',
+        isClosable: true,
+        position: 'bottom-right'
+      })
+      return
+    }
 
-  const handleUpdate = async (e) => {
+    const recipeObject = {
+      coverPhoto,
+      title,
+      description,
+      amount,
+      category,
+      prepTime,
+      cookTime,
+      ingredients: ingredients.split(',').map(i => i.trim()),
+      recipeSteps,
+    }
+
+    let data;
+    if (recipeToBeUpdated) {
+      data = await updateRecipe(recipeObject, recipeToBeUpdated._id)
+    } else {
+      data = await createRecipe(recipeObject)
+    }
+    if (data.success) {
+      toast({
+        description: recipeToBeUpdated ? 'Tarifiniz güncellendi!' : 'Tarifiniz paylaşıldı!',
+        duration: 9000,
+        isClosable: true,
+        status: 'success'
+      })
+      router.push('/').then(() => window.scrollTo(0, 0))
+    } else {
+      toast({
+        description: 'Bir hata meydana geldi, lütfen tekrar deneyin!',
+        duration: 9000,
+        isClosable: true,
+        status: 'error',
+        position: 'top-right'
+      })
+    }
 
   }
 
@@ -213,7 +217,7 @@ const ShareForm = ({ recipeToBeUpdated }) => {
 
       {
         coverPhoto &&
-        <Image
+        <Img
           objectFit="cover"
           borderRadius="xl"
           w="100%"
@@ -247,7 +251,7 @@ const ShareForm = ({ recipeToBeUpdated }) => {
             min={1} max={999}
             size="lg"
             focusBorderColor="lightRed"
-            defaultValue={amount}
+            value={amount}
             clampValueOnBlur={false}
           >
             <NumberInputField
@@ -264,7 +268,7 @@ const ShareForm = ({ recipeToBeUpdated }) => {
             min={1} max={999}
             size="lg"
             focusBorderColor="lightRed"
-            defaultValue={prepTime}
+            value={prepTime}
             clampValueOnBlur={false}
           >
             <NumberInputField
@@ -281,7 +285,7 @@ const ShareForm = ({ recipeToBeUpdated }) => {
             min={1} max={999}
             size="lg"
             focusBorderColor="lightRed"
-            defaultValue={cookTime}
+            value={cookTime}
             clampValueOnBlur={false}
           >
             <NumberInputField
@@ -305,7 +309,7 @@ const ShareForm = ({ recipeToBeUpdated }) => {
       </FormControl>
 
       <FormControl isRequired>
-        <FormLabel>Malzemelerinizi adediyle beraber, virgülle ayırarak giriniz.</FormLabel>
+        <FormLabel>Malzemelerinizi miktarıyla beraber, virgülle ayırarak giriniz.</FormLabel>
         <Textarea
           focusBorderColor="lightRed"
           placeholder="Örnek: 2 adet domates, 1 bardak su, yarım soğan"

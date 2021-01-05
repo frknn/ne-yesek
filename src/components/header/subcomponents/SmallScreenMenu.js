@@ -1,9 +1,8 @@
 import {
-  Menu, MenuButton, MenuList, MenuItem, useTheme,
+  Menu, MenuButton, MenuList, MenuItem,
 } from "@chakra-ui/react";
 import Link from 'next/link';
 import { ChevronDownIcon } from '@chakra-ui/icons'
-
 
 const SmallScreenMenu = ({ menuItems }) => {
 

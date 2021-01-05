@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Container, Avatar, Link as ChakraLink, Heading, HStack, IconButton, Image, Tag, TagLabel, Text, VStack, UnorderedList, ListItem, ListIcon, OrderedList, Divider, useToast } from "@chakra-ui/react";
+import { Container, Avatar, Link as ChakraLink, Heading, HStack, IconButton, Img, Tag, TagLabel, Text, VStack, UnorderedList, ListItem, ListIcon, OrderedList, Divider, useToast } from "@chakra-ui/react";
 import { StarIcon, CheckIcon } from '@chakra-ui/icons'
 import Link from 'next/link';
 import useLocalStorageValue from '../../utils/hooks/useLocalStorageValue'
@@ -7,14 +7,33 @@ import { addRecipeToFavorites } from '../../services/userService'
 
 const Recipe = ({ recipe }) => {
   const toast = useToast()
-
   const [favorited, setFavorited] = useState(false)
   const [isFavButtonDisabled, setIsFavButtonDisabled] = useState(false)
 
+  useEffect(() => {
+    const currentUser = useLocalStorageValue('currentUser')
+    let isFavorited = currentUser?.recipesSaved.some(r => r === recipe._id)
+    if (isFavorited) setFavorited(true)
+  }, [])
+
   const handleFav = async (recipeId) => {
+
+    const currentUser = useLocalStorageValue('currentUser')
+    if(!currentUser) {
+      toast({
+        description: 'Favorilere eklemek için giriş yapın!',
+        status: 'error',
+        isClosable: true,
+        position: 'bottom-right'
+      })
+      return
+    }
+
     setIsFavButtonDisabled(true)
     setFavorited(prevState => !prevState)
+
     const response = await addRecipeToFavorites(recipeId)
+
     if (!response.success) {
       toast({
         description: 'Bir hata oluştu, lütfen tekrar deneyin!',
@@ -22,6 +41,7 @@ const Recipe = ({ recipe }) => {
         isClosable: true,
         position: 'bottom-right'
       })
+
       setFavorited(prevState => !prevState)
     } else {
       toast({
@@ -34,17 +54,7 @@ const Recipe = ({ recipe }) => {
       localStorage.setItem('currentUser', JSON.stringify(response.data))
     }
     setIsFavButtonDisabled(false)
-    console.log('RESP: ', response)
   }
-
-  useEffect(() => {
-    const currentUser = useLocalStorageValue('currentUser')
-    console.log('CRU: ', currentUser)
-    console.log('RID: ', recipe._id)
-    let isFavorited = currentUser?.recipesSaved.some(r => r === recipe._id)
-    console.log('IS FAV:', isFavorited)
-    if (isFavorited) setFavorited(true)
-  }, [])
 
   return (
     <Container my={24} maxW={["100%", "90%", "70%"]} centerContent>
@@ -103,7 +113,7 @@ const Recipe = ({ recipe }) => {
 
         </HStack>
 
-        <Image w="full" maxH="80vh" objectFit="cover" borderRadius="xl" src={recipe.coverPhoto} alt={recipe.title} />
+        <Img w="full" maxH="80vh" objectFit="cover" borderRadius="xl" src={recipe.coverPhoto} alt={recipe.title} />
 
         <HStack
           spacing={1}
@@ -130,7 +140,7 @@ const Recipe = ({ recipe }) => {
               borderBottomColor="darkRed"
               color="darkRed">
               Hazırlanma Süresi</Text>
-            <Text>{recipe.prepTime}</Text>
+            <Text>{recipe.prepTime} dk.</Text>
           </VStack>
           <VStack>
             <Text w="full"
@@ -140,7 +150,7 @@ const Recipe = ({ recipe }) => {
               fontWeight="bold"
               color="darkRed"
             >Pişme Süresi</Text>
-            <Text>{recipe.cookTime}</Text>
+            <Text>{recipe.cookTime} dk.</Text>
           </VStack>
         </HStack>
 

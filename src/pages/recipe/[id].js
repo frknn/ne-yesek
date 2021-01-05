@@ -1,19 +1,19 @@
 import Head from 'next/head';
 import Recipe from "../../components/recipe-page/Recipe";
 import Header from '../../components/header/Header'
-import axios from "axios";
+import { getRecipeById } from '../../services/recipeService';
 
 const recipe = ({ data }) => {
 
   return (
     <>
       <Head>
-        <title>NeYesek | {data.data.title}</title>
-        <meta name="description" content={`${data.data.title} tarifi`} />
-        <meta name="keywords" content={`yemek, tarif, yemek tarifleri, ${data.data.title}`} />
+        <title>NeYesek | {data.title}</title>
+        <meta name="description" content={`${data.title} tarifi`} />
+        <meta name="keywords" content={`yemek, tarif, yemek tarifleri, ${data.title}`} />
       </Head>
       <Header />
-      <Recipe recipe={data.data} />
+      <Recipe recipe={data} />
     </>
   );
 }
@@ -21,14 +21,7 @@ const recipe = ({ data }) => {
 
 export async function getServerSideProps(context) {
 
-  const URL = `http://localhost:5000/api/v1/recipes/${context.params.id}`
-
-  const data = await axios.get(URL, {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-
+  const data = await getRecipeById(context.params.id)
   return {
     props: { data: data.data }
   }

@@ -1,14 +1,12 @@
 import Head from 'next/head';
-import axios from "axios";
 import { useState, useEffect } from "react";
-import { useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import ShareForm from '../../components/share-form/ShareForm'
 import useLocalStorageValue from "../../utils/hooks/useLocalStorageValue";
+import { getRecipeById } from '../../services/recipeService';
 
 const update = ({ recipe }) => {
   const [renderPage, setRenderPage] = useState(false)
-  const toast = useToast()
   const router = useRouter()
 
   useEffect(() => {
@@ -33,16 +31,10 @@ const update = ({ recipe }) => {
 
 export async function getServerSideProps(context) {
 
-  const URL = `http://localhost:5000/api/v1/recipes/${context.params.id}`
-
-  const data = await axios.get(URL, {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
+  const data = await getRecipeById(context.params.id)
 
   return {
-    props: { recipe: data.data.data }
+    props: { recipe: data.data }
   }
 }
 

@@ -12,6 +12,15 @@ export const getRecipesByTitle = async (title) => {
   }
 }
 
+export const getRecipeById = async (id) => {
+  try {
+    const response = await axios.get(`${URL}/${id}`)
+    return response.data
+  } catch (error) {
+    error.response.data
+  }
+}
+
 export const getAllRecipes = async () => {
   try {
     const response = await axios.get(URL)
@@ -62,7 +71,6 @@ export const deleteRecipe = async (id) => {
     const response = await axios.delete(`${URL}/${id}`, {
       headers: { 'Authorization': 'Bearer ' + token }
     })
-    console.log(response.data)
     return response.data
   } catch (error) {
     return error.response.data
@@ -71,7 +79,6 @@ export const deleteRecipe = async (id) => {
 
 export const uploadImage = async (image) => {
   try {
-    console.log('SERVICE FUNCTION STARTED')
     const url = "https://api.cloudinary.com/v1_1/dgxfhzjli/upload";
 
     const formData = new FormData()
@@ -79,7 +86,6 @@ export const uploadImage = async (image) => {
     formData.append('upload_preset', 'ml_default')
 
     const response = await axios.post(url, formData)
-    console.log('SERVICE FUNCTION ENDED: ', response)
 
     return response
 

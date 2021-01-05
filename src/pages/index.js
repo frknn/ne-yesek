@@ -3,20 +3,19 @@ import Header from "../components/header/Header"
 import RecipeCardList from "../components/recipe-card-list/RecipeCardList"
 import { getAllRecipes } from '../services/recipeService'
 
-const Index = (props) => (
+const Index = ({ data }) => (
   <>
     <Head>
       <title>NeYesek | Ana Sayfa</title>
-      <meta name="description" content="Yemek Tarifleri"/>
-      <meta name="keywords" content="yemek, tarif, yemek tarifleri"/>
+      <meta name="description" content="Yemek Tarifleri" />
+      <meta name="keywords" content="yemek, tarif, yemek tarifleri" />
     </Head>
     <Header />
     <RecipeCardList
-      recipes={props.data}
+      recipes={data}
       mx="auto"
       my={24}
       w={["100%", "80%"]}
-      spacing={0}
     />
   </>
 )

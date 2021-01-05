@@ -1,13 +1,13 @@
-import { PlusSquareIcon } from "@chakra-ui/icons";
-import { Box, Flex, Heading, Image, VStack, Tabs, TabList, TabPanels, Tab, TabPanel, Text, useToast } from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { PlusSquareIcon } from "@chakra-ui/icons"
+import { Box, Flex, Heading, Img, VStack, Tabs, TabList, TabPanels, Tab, TabPanel, Text, useToast } from "@chakra-ui/react"
+import { useRouter } from "next/router"
+import { useState, useEffect } from "react"
 import RecipeCardList from '../recipe-card-list/RecipeCardList'
 import UploadButton from '../upload-button/UploadButton'
 import { uploadImage } from '../../services/recipeService'
 import { updateUser } from '../../services/userService'
-import useLocalStorageValue from "../../utils/hooks/useLocalStorageValue";
-import useValidateImageFile from "../../utils/hooks/useValidateImageFile";
+import useLocalStorageValue from "../../utils/hooks/useLocalStorageValue"
+import useValidateImageFile from "../../utils/hooks/useValidateImageFile"
 
 const User = ({ user }) => {
 
@@ -91,7 +91,7 @@ const User = ({ user }) => {
             borderColor="darkRed"
             borderRadius="full"
           >
-            <Image
+            <Img
               objectFit="cover"
               src={userProfilePicture || user.profilePicture}
               alt="user profile picture"
@@ -117,13 +117,13 @@ const User = ({ user }) => {
             {user.name + ' ' + user.lastName}
           </Heading>
         </VStack>
-        <Tabs my={8} isFitted colorScheme="red">
-          <TabList>
+        <Tabs my={12} isFitted colorScheme="red">
+          <TabList >
             <Tab>
-              <Text>Paylaşılan Tarifler</Text>
+              <Text fontSize="xl" fontWeight="500">Paylaşılan Tarifler</Text>
             </Tab>
             <Tab>
-              <Text>Favori Tarifler</Text>
+              <Text fontSize="xl" fontWeight="500">Favori Tarifler</Text>
             </Tab>
           </TabList>
           <TabPanels>
@@ -143,7 +143,7 @@ const User = ({ user }) => {
                 mx="auto"
                 my={4}
                 w="100%"
-                cardWidth={["100%", "100%", "100%", "35%"]}
+                cardWidth={["100%", "100%", "100%", "43%"]}
                 recipes={user.recipesSaved}
                 onProfile={true}
                 onOwnProfile={onOwnProfile}

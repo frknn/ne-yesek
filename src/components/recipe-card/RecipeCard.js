@@ -1,5 +1,4 @@
-import { StarIcon, TimeIcon } from "@chakra-ui/icons";
-import { Avatar, Box, Button, Flex, TagLeftIcon, Link as ChakraLink, Heading, HStack, IconButton, Image, Text, Tag, WrapItem, useToast } from "@chakra-ui/react";
+import { Avatar, Box, Button, Flex, Link as ChakraLink, Heading, HStack, Img, Text, Tag, WrapItem, useToast } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import Link from 'next/link';
 import { useRouter } from 'next/router'
@@ -15,23 +14,16 @@ const RecipeCard = ({ w, recipe, onProfile, onOwnProfile }) => {
 
   useEffect(() => {
     const currentUser = useLocalStorageValue('currentUser')
-    
+
     if (currentUser?.recipes.some(r => r._id === recipe._id)) {
       setOwnRecipe(true)
     } else {
       setOwnRecipe(false)
     }
   }, [])
-
-  const handleFav = () => {
-
-  }
-
+  
   const handleDeleteRecipe = async (id) => {
-    console.log('DELETE HADNLER RUN')
     const deletedRecipe = await deleteRecipe(id)
-
-    console.log('DELETED RECIOE: ', deletedRecipe)
 
     if (deletedRecipe.success) {
       toast({
@@ -62,7 +54,7 @@ const RecipeCard = ({ w, recipe, onProfile, onOwnProfile }) => {
         _hover={{ cursor: "pointer" }}
         overflow="hidden">
 
-        <Image
+        <Img
           w="full"
           h="220px"
           objectFit="cover"
@@ -83,34 +75,21 @@ const RecipeCard = ({ w, recipe, onProfile, onOwnProfile }) => {
             align="center"
           >
             <Heading
-              fontSize={["3xl"]}
+              fontSize="3xl"
               onClick={() => router.push(`/recipe/${recipe._id}`).then(() => window.scrollTo(0, 0))}
             >{recipe.title}
             </Heading>
-            <IconButton
-              bgColor="lightGray"
-              _hover={{ bgColor: "lightGray" }}
-              _focus={{ boxShadow: "none" }}
-              aria-label="favorilere ekle"
-              size="md"
-              onClick={handleFav}
-              icon={
-                <StarIcon
-                  color={recipe ?
-                    "darkRed" :
-                    "gray.400"}
-                  _hover={{ color: "lightRed" }}
-                />
-              } />
           </Flex>
           <Text
+            mt={2}
+            lineHeight="1.2"
             onClick={() => router.push(`/recipe/${recipe._id}`).then(() => window.scrollTo(0, 0))}
           >{recipe.description}</Text>
 
-          <HStack spacing={1} mt={4} mb={8}>
-            <Tag size="sm" bgColor="lightRed" color="lightGray">{recipe.amount} kişilik</Tag>
-            <Tag size="sm" bgColor="lightRed" color="lightGray">{recipe.prepTime} hazırlama</Tag>
-            <Tag size="sm" bgColor="lightRed" color="lightGray"><TagLeftIcon as={TimeIcon} />{recipe.cookTime}</Tag>
+          <HStack spacing={1} mt={6} mb={8}>
+            <Tag size="sm" bgColor="darkRed" color="lightGray">{recipe.amount} kişilik</Tag>
+            <Tag size="sm" bgColor="darkRed" color="lightGray">{recipe.prepTime} dk. hazırlama</Tag>
+            <Tag size="sm" bgColor="darkRed" color="lightGray">{recipe.cookTime} dk. pişme</Tag>
           </HStack>
 
           {!onProfile &&
@@ -138,7 +117,7 @@ const RecipeCard = ({ w, recipe, onProfile, onOwnProfile }) => {
           {
             (onOwnProfile && ownRecipe) &&
             <HStack w="full">
-              <Button onClick={() => router.push(`/update/${recipe._id}`)} colorScheme="yellow">Güncelle</Button>
+              <Button onClick={() => router.push(`/update/${recipe._id}`)} colorScheme="yellow" color="white">Güncelle</Button>
               <Button onClick={() => handleDeleteRecipe(recipe._id)} colorScheme="red">Sil</Button>
             </HStack>
           }

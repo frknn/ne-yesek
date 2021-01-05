@@ -16,12 +16,12 @@ const RecipeCardList = (props) => {
     >
       {
         recipes.map(
-          recipe => <RecipeCard 
-          key={recipe.title} 
-          w={cardWidth} 
-          recipe={recipe} 
-          onProfile={onProfile}
-          onOwnProfile={onOwnProfile}
+          recipe => <RecipeCard
+            key={recipe.title}
+            w={cardWidth}
+            recipe={recipe}
+            onProfile={onProfile}
+            onOwnProfile={onOwnProfile}
           />
         )
       }
