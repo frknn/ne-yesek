@@ -29,6 +29,10 @@ const HeaderMenu = () => {
       icon: <SearchIcon mb={1} mr={1} />
     },
     {
+      destination: '/filter',
+      text: 'Filtrele',
+    },
+    {
       destination: '/share',
       text: 'Tarif Paylaş',
     },
@@ -44,6 +48,10 @@ const HeaderMenu = () => {
       destination: '/search',
       text: 'Tarif Ara',
       icon: <SearchIcon mb={1} mr={1} />
+    },
+    {
+      destination: '/filter',
+      text: 'Filtrele',
     },
     {
       destination: '/signup',
