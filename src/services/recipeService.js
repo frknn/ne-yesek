@@ -3,9 +3,9 @@ import useLocalStorageValue from '../utils/hooks/useLocalStorageValue'
 
 const URL = `http://localhost:5000/api/v1/recipes`
 
-export const getRecipesByTitle = async (title) => {
+export const getRecipesByQueryString = async (queryString) => {
   try {
-    const response = await axios.get(`${URL}?title=${title}`)
+    const response = await axios.get(`${URL}?${queryString}`)
     return response.data
   } catch (error) {
     return error.response.data

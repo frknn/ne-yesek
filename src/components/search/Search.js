@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Box, Flex, Heading, Input, Text } from "@chakra-ui/react";
 import RecipeCardList from '../recipe-card-list/RecipeCardList'
 import CloseButton from '../close-button/CloseButton'
-import { getRecipesByTitle } from '../../services/recipeService'
+import { getRecipesByQueryString } from '../../services/recipeService'
 import useDebounce from '../../utils/hooks/useDebounce';
 import LoadingSpinner from '../loading-spinner/LoadingSpinner';
 
@@ -18,13 +18,15 @@ const Search = () => {
 
   useEffect(() => {
     if (debouncedTerm) {
+      const titleQuery = `title=${debouncedTerm}`
       setIsSearching(true)
       setRecipes([])
-      getRecipesByTitle(debouncedTerm)
+      getRecipesByQueryString(titleQuery)
         .then(response => {
           setIsSearching(false)
           setRecipes(response.data)
         })
+
     } else {
       setRecipes([])
     }
