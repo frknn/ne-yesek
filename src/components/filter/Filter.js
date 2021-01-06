@@ -59,7 +59,7 @@ const Filter = () => {
     if (queryString[queryString.length - 1] === '&') {
       queryString = queryString.slice(0, -1)
     }
-    console.log(queryString)
+    
     const response = await getRecipesByQueryString(queryString)
     if (response.success) {
       setRecipes(response.data)
