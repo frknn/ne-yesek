@@ -5,7 +5,7 @@ const Custom404 = () => {
   return (
     <>
       <Head>
-        <title>Ne Yesek | 404</title>
+        <title>NeYesek | 404</title>
         <meta name="description" content="Sayfa bulunamadı" />
       </Head>
       <Custom404Page />

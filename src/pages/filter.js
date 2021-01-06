@@ -5,7 +5,7 @@ const filter = () => {
   return (
     <>
       <Head>
-        <title>Ne Yesek | Filtrele</title>
+        <title>NeYesek | Filtrele</title>
         <meta name="description" content="Yemek tariflerini istediğiniz malzemelere, kategoriye, hazırlanma ve pişme süresine göre filtreleyin."/>
       </Head>
       <Filter />
