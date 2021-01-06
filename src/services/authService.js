@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const authUrl = 'http://localhost:5000/api/v1/auth'
+const authUrl = 'https://ne-yesek-api.herokuapp.com/api/v1/auth'
 
 const register = async (name, lastName, email, password) => {
   try {

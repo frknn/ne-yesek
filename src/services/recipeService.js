@@ -1,7 +1,7 @@
 import axios from 'axios'
 import useLocalStorageValue from '../utils/hooks/useLocalStorageValue'
 
-const URL = `http://localhost:5000/api/v1/recipes`
+const URL = `https://ne-yesek-api.herokuapp.com/api/v1/recipes`
 
 export const getRecipesByQueryString = async (queryString) => {
   try {

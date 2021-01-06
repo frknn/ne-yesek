@@ -1,7 +1,7 @@
 import axios from 'axios'
 import useLocalStorageValue from '../utils/hooks/useLocalStorageValue'
 
-const URL = 'http://localhost:5000/api/v1/users'
+const URL = 'https://ne-yesek-api.herokuapp.com/api/v1/users'
 
 export const getUserById = async (id) => {
   try {
