@@ -21,7 +21,7 @@ const RecipeCard = ({ w, recipe, onProfile, onOwnProfile }) => {
       setOwnRecipe(false)
     }
   }, [])
-  
+
   const handleDeleteRecipe = async (id) => {
     const deletedRecipe = await deleteRecipe(id)
 

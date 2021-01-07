@@ -19,7 +19,7 @@ const Recipe = ({ recipe }) => {
   const handleFav = async (recipeId) => {
 
     const currentUser = useLocalStorageValue('currentUser')
-    if(!currentUser) {
+    if (!currentUser) {
       toast({
         description: 'Favorilere eklemek için giriş yapın!',
         status: 'error',

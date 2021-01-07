@@ -27,6 +27,7 @@ import { createRecipe, updateRecipe, uploadImage } from '../../services/recipeSe
 import ShareFormLayout from './subcomponents/ShareFormLayout'
 import UploadButton from "../upload-button/UploadButton";
 import useValidateImageFile from '../../utils/hooks/useValidateImageFile'
+import useLocalStorageValue from "../../utils/hooks/useLocalStorageValue";
 
 const ShareForm = ({ recipeToBeUpdated }) => {
 
@@ -168,6 +169,10 @@ const ShareForm = ({ recipeToBeUpdated }) => {
       data = await createRecipe(recipeObject)
     }
     if (data.success) {
+      const currentUser = useLocalStorageValue('currentUser')
+      currentUser.recipes.push(data.data)
+      localStorage.setItem('currentUser', JSON.stringify(currentUser))
+
       toast({
         description: recipeToBeUpdated ? 'Tarifiniz güncellendi!' : 'Tarifiniz paylaşıldı!',
         duration: 9000,
