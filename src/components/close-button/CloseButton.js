@@ -5,7 +5,7 @@ import Link from 'next/link';
 const CloseButton = ({ mb }) => {
   return (
     <Box mb={mb || 8}>
-      <Link href="/">
+      <Link prefetch={false} href="/">
         <ChakraLink
           fontSize={["1.25rem", "1.5rem", "1.75rem"]}
           fontWeight="semibold"

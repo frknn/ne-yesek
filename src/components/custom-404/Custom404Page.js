@@ -10,7 +10,7 @@ const Custom404Page = () => {
           <Heading as="h2" size="xl">Maalesef, böyle bir sayfa yok :(</Heading>
           <Text fontWeight="400" fontSize="lg">Aşağıdaki bağlantıdan ana sayfaya dönüp, başka tariflere göz atabilirsiniz!</Text>
         </VStack>
-        <Link href="/">
+        <Link prefetch={false} href="/">
           <ChakraLink
             fontWeight="800"
             fontSize="2xl"

@@ -5,7 +5,9 @@ import Link from 'next/link';
 const LargeScreenMenuItem = ({ destination, children, onClick }) => {
 
   return (
-    <Link href={destination}>
+    <Link
+      prefetch={false}
+      href={destination}>
       <ChakraLink
         onClick={onClick}
         _hover={{
