@@ -55,6 +55,7 @@ const ShareForm = ({ recipeToBeUpdated }) => {
   const [cookTime, setCookTime] = useState(1)
   const [ingredients, setIngredients] = useState('')
   const [coverPhoto, setCoverPhoto] = useState('')
+  const [cardPhoto, setCardPhoto] = useState('')
 
   const [isImageLoading, setIsImageLoading] = useState(false)
 
@@ -63,7 +64,7 @@ const ShareForm = ({ recipeToBeUpdated }) => {
 
   useEffect(() => {
     if (recipeToBeUpdated) {
-      const { title, description, category, amount, prepTime, cookTime, ingredients, coverPhoto, recipeSteps } = recipeToBeUpdated
+      const { title, description, category, amount, prepTime, cookTime, ingredients, recipeCoverPhoto, recipeCardPhoto, recipeSteps } = recipeToBeUpdated
 
       setTitle(title)
       setDescription(description)
@@ -71,7 +72,8 @@ const ShareForm = ({ recipeToBeUpdated }) => {
       setPrepTime(prepTime)
       setCookTime(cookTime)
       setIngredients(ingredients.join(','))
-      setCoverPhoto(coverPhoto)
+      setCoverPhoto(recipeCoverPhoto)
+      setCardPhoto(recipeCardPhoto)
       setCategory(category)
       setRecipeSteps(recipeSteps)
     }
@@ -123,9 +125,10 @@ const ShareForm = ({ recipeToBeUpdated }) => {
     }
 
     setIsImageLoading(true)
-    const data = await uploadImage(file)
+    const data = await uploadImage(file, 'recipe_img_preset')
     setIsImageLoading(false)
-    setCoverPhoto(data.data.url)
+    setCoverPhoto(data.data.secure_url)
+    setCardPhoto(data.data.eager[0].secure_url)
   }
 
   const handleSubmit = async (e) => {
@@ -151,7 +154,8 @@ const ShareForm = ({ recipeToBeUpdated }) => {
     }
 
     const recipeObject = {
-      coverPhoto,
+      recipeCoverPhoto: coverPhoto,
+      recipeCardPhoto: cardPhoto,
       title,
       description,
       amount,

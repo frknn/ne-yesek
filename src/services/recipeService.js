@@ -77,13 +77,13 @@ export const deleteRecipe = async (id) => {
   }
 }
 
-export const uploadImage = async (image) => {
+export const uploadImage = async (image, preset) => {
   try {
     const url = "https://api.cloudinary.com/v1_1/dgxfhzjli/upload";
 
     const formData = new FormData()
     formData.append('file', image)
-    formData.append('upload_preset', 'ml_default')
+    formData.append('upload_preset', preset)
 
     const response = await axios.post(url, formData)
 

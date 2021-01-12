@@ -58,9 +58,9 @@ const RecipeCard = ({ w, recipe, onProfile, onOwnProfile }) => {
           w="full"
           h="220px"
           objectFit="cover"
-          src={recipe.coverPhoto}
-          alt="recipe cover photo"
-          transition="all 0.2s ease-in-out"
+          src={recipe.recipeCardPhoto}
+          alt="recipe card photo"
+          transition="all 0.25s ease-in-out"
           _groupHover={{ transform: "scale(1.1)" }}
           onClick={() => router.push(`/recipe/${recipe._id}`).then(() => window.scrollTo(0, 0))}
         />
@@ -96,7 +96,7 @@ const RecipeCard = ({ w, recipe, onProfile, onOwnProfile }) => {
             <HStack spacing={1}>
               <Avatar
                 size="sm"
-                src={recipe.owner.profilePicture}
+                src={recipe.owner.profilePictureSmall}
                 borderColor="darkRed"
                 showBorder={true}
                 loading="lazy"

@@ -36,13 +36,14 @@ const User = ({ user }) => {
 
     setIsImageLoading(true)
 
-    const imageData = await uploadImage(file)
+    const imageData = await uploadImage(file, 'user_img_preset')
 
     if (imageData.status === 200) {
       const currentUser = useLocalStorageValue('currentUser')
       const userData = await updateUser(
         {
-          profilePicture: imageData.data.url
+          profilePictureBig: imageData.data.secure_url,
+          profilePictureSmall: imageData.data.eager[0].secure_url
         },
         currentUser.id)
 
@@ -52,7 +53,7 @@ const User = ({ user }) => {
           status: 'success',
           isClosable: true
         })
-        setUserProfilePicture(imageData.data.url)
+        setUserProfilePicture(imageData.data.secure_url)
       } else {
         toast({
           description: 'Bir hata oluştu, lütfen tekrar deneyin!',
@@ -93,7 +94,7 @@ const User = ({ user }) => {
           >
             <Img
               objectFit="cover"
-              src={userProfilePicture || user.profilePicture}
+              src={userProfilePicture || user.profilePictureBig}
               alt="user profile picture"
               borderRadius="full"
               boxSize={["150px", "175px", "200px", "225px"]}

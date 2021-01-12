@@ -69,7 +69,7 @@ const Recipe = ({ recipe }) => {
           <HStack spacing={2}>
             <Avatar
               size="sm"
-              src={recipe.owner.profilePicture}
+              src={recipe.owner.profilePictureSmall}
               borderColor="darkRed"
               showBorder={true}
               loading="lazy"
@@ -113,7 +113,7 @@ const Recipe = ({ recipe }) => {
 
         </HStack>
 
-        <Img w="full" maxH="80vh" objectFit="cover" borderRadius="xl" src={recipe.coverPhoto} alt={recipe.title} />
+        <Img w="full" maxH="80vh" objectFit="cover" borderRadius="xl" src={recipe.recipeCoverPhoto} alt={recipe.title} />
 
         <HStack
           spacing={1}
