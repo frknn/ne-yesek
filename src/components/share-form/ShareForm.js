@@ -227,6 +227,7 @@ const ShareForm = ({ recipeToBeUpdated }) => {
       {
         coverPhoto &&
         <Img
+          loading="lazy"
           objectFit="cover"
           borderRadius="xl"
           w="100%"

@@ -93,6 +93,7 @@ const User = ({ user }) => {
             borderRadius="full"
           >
             <Img
+              loading="lazy"
               objectFit="cover"
               src={userProfilePicture || user.profilePictureBig}
               alt="user profile picture"
