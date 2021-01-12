@@ -76,7 +76,6 @@ const Recipe = ({ recipe }) => {
               alt="user profile picture"
             />
             <Link
-              prefetch={false}
               href={`/user/${recipe.owner._id}`}>
               <ChakraLink
                 fontWeight="semibold"

@@ -15,7 +15,7 @@ const SmallScreenMenu = ({ menuItems }) => {
         {
           menuItems.map(menuItem => (
             <MenuItem onClick={menuItem.onClick} key={menuItem.text}>
-              <Link prefetch={false} href={menuItem.destination}>
+              <Link href={menuItem.destination}>
                 {menuItem.text}
               </Link>
             </MenuItem>
