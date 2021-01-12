@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const bruh = ({data}) => {
+const testingApi = ({data}) => {
   return (
     <div>
       {data}
@@ -19,4 +19,4 @@ export const getServerSideProps = async (ctx) => {
   }
 }
 
-export default bruh;
+export default testingApi;
