@@ -57,7 +57,6 @@ const RecipeCard = ({ w, recipe, onProfile, onOwnProfile }) => {
         <Img
           w="full"
           h="220px"
-          loading="lazy"
           objectFit="cover"
           src={recipe.recipeCardPhoto}
           alt="recipe card photo"

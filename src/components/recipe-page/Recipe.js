@@ -113,7 +113,7 @@ const Recipe = ({ recipe }) => {
 
         </HStack>
 
-        <Img loading="lazy" w="full" maxH="80vh" objectFit="cover" borderRadius="xl" src={recipe.recipeCoverPhoto} alt={recipe.title} />
+        <Img w="full" maxH="80vh" objectFit="cover" borderRadius="xl" src={recipe.recipeCoverPhoto} alt={recipe.title} />
 
         <HStack
           spacing={1}
